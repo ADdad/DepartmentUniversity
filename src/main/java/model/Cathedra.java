@@ -5,6 +5,12 @@ public class Cathedra {
     private String name;
     private String phoneNumber;
 
+    public Cathedra(String id, String name, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getId() {
         return id;
     }

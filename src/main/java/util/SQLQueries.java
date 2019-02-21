@@ -13,4 +13,9 @@ public abstract class SQLQueries {
             "WHERE scientist_id = ?";
     public static final String UPDATE_MASTER = "UPDATE masters SET cathedra_id = ?, chief_id = ?, diploma_theme = ?, " +
             "start_date = ?, end_date = ?, end_reason = ? WHERE scientist_id = ?";
+    public static final String GET_CATHEDRA_BY_ID = "SELECT * FROM cathedras WHERE id = ?";
+    public static final String GET_ALL_CATHEDRAS = "SELECT * FROM cathedras";
+    public static final String INSERT_CATHEDRA = "INSERT INTO cathedras VALUES (?, ?, ?)";
+    public static final String DELETE_CATHEDRA = "DELETE FROM cathedras WHERE id = ?";
+    public static final String UPDATE_CATHEDRA = "UPDATE cathedras name = ?, phone_number = ? WHERE id = ?";
 }
