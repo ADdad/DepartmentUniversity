@@ -3,7 +3,7 @@ package model;
 import java.sql.Date;
 
 public class Master extends Scientist {
-    private String cathedra_id;
+    private String cathedraId;
     private String chiefId;
     private String diplomaTheme;
     private Date startDate;
@@ -11,11 +11,11 @@ public class Master extends Scientist {
     private String endReason;
 
     public String getCathedraId() {
-        return cathedra_id;
+        return cathedraId;
     }
 
     public void setCathedraId(String cathedra_id) {
-        this.cathedra_id = cathedra_id;
+        this.cathedraId = cathedra_id;
     }
 
     public String getChiefId() {
@@ -61,7 +61,7 @@ public class Master extends Scientist {
     @Override
     public String toString() {
         return super.toString() + "\nMaster{" +
-                "cathedra_id='" + cathedra_id + '\'' +
+                "cathedraId='" + cathedraId + '\'' +
                 ", chiefId='" + chiefId + '\'' +
                 ", diplomaTheme='" + diplomaTheme + '\'' +
                 ", startDate=" + startDate +

@@ -12,12 +12,11 @@ public class MasterDao implements BaseDao<Master> {
 
     @Override
     public Master getById(String id) {
-        Connection connection = ConnectionFactory.getConnection();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(SQLQueries.GET_MASTER_BY_ID + "'" + id + "'");
-            if(rs.next())
-            {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_MASTER_BY_ID);) {
+            stmt.setString(0, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
                 return extractMasterFromRS(rs);
             }
         } catch (SQLException ex) {
@@ -28,7 +27,7 @@ public class MasterDao implements BaseDao<Master> {
 
     private Master extractMasterFromRS(ResultSet rs) throws SQLException {
         Master master = new Master();
-        master.setScientistId( rs.getString("scientist_id") );
+        master.setScientistId(rs.getString("scientist_id"));
         master.setSecondName(rs.getString("second_name"));
         master.setPhoneNumber(rs.getString("phone_number"));
         master.setGender(rs.getString("gender"));
@@ -44,9 +43,8 @@ public class MasterDao implements BaseDao<Master> {
 
     @Override
     public boolean add(Master scientist) {
-
-        try(Connection connection = ConnectionFactory.getConnection()) {
-           //TODO add check if scientist exists
+        try (Connection connection = ConnectionFactory.getConnection()) {
+            //TODO add check if scientist exists
             PreparedStatement ps = connection.prepareStatement(SQLQueries.INSERT_SCIENSIST);
             String newId = UUID.randomUUID().toString();
             ps.setString(1, newId);
@@ -62,43 +60,67 @@ public class MasterDao implements BaseDao<Master> {
             ps.setDate(5, scientist.getStartDate());
             ps.setDate(6, scientist.getEndDate());
             ps.setString(7, scientist.getEndReason());
-            i+=ps.executeUpdate();
-            if(i == 2) {
+            i += ps.executeUpdate();
+            ps.close();
+            if (i == 2) {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            return false;
         }
         return false;
     }
 
     @Override
     public List<Master> getAll() {
-        Connection connection = ConnectionFactory.getConnection();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM scientists s INNER JOIN masters m ON s.scientist_id = m.scientist_id");
-            List<Master> masters = new ArrayList();
-            while(rs.next())
-            {
+        List<Master> masters = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection(); Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(SQLQueries.GET_ALL_MASTERS);
+            while (rs.next()) {
                 Master user = extractMasterFromRS(rs);
                 masters.add(user);
             }
-            return masters;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
-
+        return masters;
     }
 
     @Override
     public boolean delete(Master scientist) {
+        try (Connection connection = ConnectionFactory.getConnection(); PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_MASTER)) {
+            //TODO add check if scientist exists
+            ps.setString(0, scientist.getScientistId());
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public boolean update(Master scientist) {
+        try (Connection connection = ConnectionFactory.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_SCIENTIST);
+            ps.setString(0, scientist.getSecondName());
+            ps.setString(1, scientist.getPhoneNumber());
+            ps.setString(2, scientist.getGender());
+            ps.setString(3, scientist.getScientistId());
+            int i = ps.executeUpdate();
+            ps = connection.prepareStatement(SQLQueries.UPDATE_MASTER);
+            ps.setString(0, scientist.getCathedraId());
+            ps.setString(1, scientist.getChiefId());
+            ps.setString(2, scientist.getDiplomaTheme());
+            ps.setDate(3, scientist.getStartDate());
+            ps.setDate(4, scientist.getEndDate());
+            ps.setString(5, scientist.getEndReason());
+            ps.setString(6, scientist.getScientistId());
+            i += ps.executeUpdate();
+            return i == 2;
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
         return false;
     }
 }
