@@ -1,10 +1,13 @@
-import presenter.MainFrame;
+import presenter.MainForm;
 import util.ServiceFactory;
 
 public class Main {
 
     public static void main(String[] args) {
-        new MainFrame(ServiceFactory.getMasterService());
+
+
+        new MainForm(ServiceFactory.getMasterService());
+
     }
 
 }
