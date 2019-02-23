@@ -8,9 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainTable {
+public class MastersTable {
 
-    public MainTable(List<Master> masters) {
+    public MastersTable(List<Master> masters) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

@@ -24,7 +24,7 @@ public abstract class SQLQueries {
     public static final String DELETE_SCIENCE_THEME = "DELETE FROM science_themes WHERE id = ?";
     public static final String UPDATE_SCIENCE_THEME = "UPDATE science_themes SET chief_id = ?, cathedra_id = ?, name = ?, " +
             "customer = ?, start_date = ?, end_date = ? WHERE id = ?";
-    public static final String GET_SCIENTIST_JOBS_BY_SCIENTIST_ID = "SELECT * FROM sc_themes_scientists WHERE worker_id = ?";
+    public static final String GET_SCIENTIST_JOBS_BY_WORKER_ID = "SELECT * FROM sc_themes_scientists WHERE worker_id = ?";
     public static final String GET_SCIENTIST_JOBS_BY_THEME_ID = "SELECT * FROM sc_themes_scientists WHERE science_theme_id = ?";
     public static final String GET_ALL_SCIENTIST_JOBS = "SELECT * FROM sc_themes_scientists";
     public static final String DELETE_SCIENTIST_JOB = "DELETE FROM sc_themes_scientists WHERE science_theme_id = ? AND " +
@@ -32,8 +32,16 @@ public abstract class SQLQueries {
     public static final String UPDATE_SCIENTIST_JOB = "UPDATE sc_themes_scientists SET start_date = ?, end_date = ? WHERE " +
             "science_theme_id = ? AND worker_id = ?";
     public static final String INSERT_SCIENTIST_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?)";
+    public static final String INSERT_SCIENTIFIC_WORK = "INSERT INTO scientific_works VALUES (?, ?, ?, ?)";
+    public static final String GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID = "SELECT * FROM scientific_works sw INNER JOIN" +
+            "sc_works_scientists ss ON sw.id = ss.work_id WHERE ss.author_id = ?";
+    public static final String GET_SCIENTIFIC_WORKS_BY_THEME_ID = "SELECT * FROM scientific_works sw INNER JOIN" +
+            "sc_works_sc_themes st ON sw.id = st.work_id WHERE st.theme_id = ?";
     public static final String ADD_WORK_TO_SCIENTIST = "INSERT INTO sc_works_scientists VALUES (?, ?)";
     public static final String ADD_WORK_TO_THEME = "INSERT INTO sc_works_sc_themes VALUES (?, ?)";
+    public static final String UPDATE_SCIENTIFIC_WORK = "UPDATE scientific_works SET name = ?, work_type = ?, year_of_job = ? " +
+            "WHERE id = ?";
+    public static final String DELETE_SCIENTIFIC_WORK = "DELETE FROM scientific_works WHERE id = ?";
     public static final String DELETE_SCIENTIST_FROM_WORK = "DELETE FROM sc_works_scientists WHERE work_id = ? AND author_id = ?";
     public static final String DELETE_THEME_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ? AND theme_id = ?";
 }

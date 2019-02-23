@@ -11,7 +11,7 @@ public interface WorksAndJobsDao{
     List<ScientificWork> getScientificWorksByThemeId(String themeId);
     List<ScientistJob> getScientistJobsByThemeId(String themeId);
     boolean addScientistJob(ScientistJob scientistJob);
-    boolean addScientificWork(ScientificWork scientificWork);
+    String addScientificWork(ScientificWork scientificWork);
     boolean deleteScientificWork(ScientificWork scientificWork);
     boolean deleteScientistJob(ScientistJob scientistJob);
     boolean updateScientistJob(ScientistJob scientistJob);
