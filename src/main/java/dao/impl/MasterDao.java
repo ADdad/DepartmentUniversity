@@ -15,7 +15,7 @@ public class MasterDao implements BaseDao<Master> {
     @Override
     public Master getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_MASTER_BY_ID);) {
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_MASTER_BY_ID)) {
             stmt.setString(0, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {

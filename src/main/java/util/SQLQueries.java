@@ -1,7 +1,8 @@
 package util;
 
 public abstract class SQLQueries {
-    public static final String GET_MASTER_BY_ID = "SELECT * FROM scientists s INNER JOIN masters m ON s.scientist_id = m.scientist_id  WHERE s.scientist_id=?";
+    public static final String GET_MASTER_BY_ID = "SELECT * FROM scientists s INNER JOIN masters m " +
+            "ON s.scientist_id = m.scientist_id  WHERE s.scientist_id=?";
     public static final String INSERT_SCIENSIST = "INSERT INTO scientists VALUES (?, ?, ?, ?)";
     public static final String INSERT_MASTER = "INSERT INTO masters VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String DELETE_MASTER = "DELETE FROM masters WHERE scientist_id = ?";
@@ -44,4 +45,6 @@ public abstract class SQLQueries {
     public static final String DELETE_SCIENTIFIC_WORK = "DELETE FROM scientific_works WHERE id = ?";
     public static final String DELETE_SCIENTIST_FROM_WORK = "DELETE FROM sc_works_scientists WHERE work_id = ? AND author_id = ?";
     public static final String DELETE_THEME_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ? AND theme_id = ?";
+    public static final String GET_TEACHER_BY_ID = "SELECT * FROM scientists s INNER JOIN teachers t " +
+            "ON s.scientist_id = t.scientist_id  WHERE s.scientist_id=?";
 }
