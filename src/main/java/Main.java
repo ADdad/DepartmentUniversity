@@ -1,4 +1,4 @@
-import dao.MasterDao;
+import dao.impl.MasterDao;
 import presenter.MainTable;
 
 public class Main {

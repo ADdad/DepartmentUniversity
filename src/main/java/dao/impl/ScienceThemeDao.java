@@ -1,5 +1,7 @@
-package dao;
+package dao.impl;
 
+import dao.config.ConnectionFactory;
+import dao.interfaces.BaseDao;
 import model.ScienceTheme;
 import util.SQLQueries;
 

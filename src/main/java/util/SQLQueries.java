@@ -31,9 +31,9 @@ public abstract class SQLQueries {
             "worker_id = ?";
     public static final String UPDATE_SCIENTIST_JOB = "UPDATE sc_themes_scientists SET start_date = ?, end_date = ? WHERE " +
             "science_theme_id = ? AND worker_id = ?";
-    public static final String INSERT_SCIENCE_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?)";
-    public static final String ADD_JOB_TO_SCIENTIST = "INSERT INTO sc_works_scientists VALUES (?, ?)";
-    public static final String ADD_JOB_TO_THEME = "INSERT INTO sc_works_sc_themes VALUES (?, ?)";
-    public static final String DELETE_SCIENTIST_FROM_JOB = "DELETE FROM sc_works_scientists WHERE work_id = ? AND author_id = ?";
-    public static final String DELETE_THEME_FROM_JOB = "DELETE FROM sc_works_sc_themes WHERE work_id = ? AND theme_id = ?";
+    public static final String INSERT_SCIENTIST_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?)";
+    public static final String ADD_WORK_TO_SCIENTIST = "INSERT INTO sc_works_scientists VALUES (?, ?)";
+    public static final String ADD_WORK_TO_THEME = "INSERT INTO sc_works_sc_themes VALUES (?, ?)";
+    public static final String DELETE_SCIENTIST_FROM_WORK = "DELETE FROM sc_works_scientists WHERE work_id = ? AND author_id = ?";
+    public static final String DELETE_THEME_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ? AND theme_id = ?";
 }

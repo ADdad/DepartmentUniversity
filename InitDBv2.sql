@@ -198,7 +198,7 @@ CREATE TABLE scientific_works
 (
     id VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
-    job_type VARCHAR(255) NOT NULL,
+    work_type VARCHAR(255) NOT NULL,
     year_of_job INT NOT NULL,
     PRIMARY KEY (id)
 );

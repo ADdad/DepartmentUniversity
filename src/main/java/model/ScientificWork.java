@@ -7,7 +7,7 @@ public class ScientificWork {
     private String name;
     private String jobType;
     private int yearOfJob;
-    private List<String> scientists;
+    private List<String> authors;
     private List<String> scienceThemes;
 
     public List<String> getScienceThemes() {
@@ -50,11 +50,11 @@ public class ScientificWork {
         this.yearOfJob = yearOfJob;
     }
 
-    public List<String> getScientists() {
-        return scientists;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setScientists(List<String> scientists) {
-        this.scientists = scientists;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 }

@@ -6,8 +6,8 @@ public class ScientistJob {
     private String name;
     private Date startDate;
     private Date endDate;
-    private String scientist;
-    private String scienceTheme;
+    private String workerId;
+    private String scienceThemeId;
 
     public String getName() {
         return name;
@@ -33,19 +33,19 @@ public class ScientistJob {
         this.endDate = endDate;
     }
 
-    public String getScientist() {
-        return scientist;
+    public String getWorkerId() {
+        return workerId;
     }
 
-    public void setScientist(String scientist) {
-        this.scientist = scientist;
+    public void setWorkerId(String workerId) {
+        this.workerId = workerId;
     }
 
-    public String getScienceTheme() {
-        return scienceTheme;
+    public String getScienceThemeId() {
+        return scienceThemeId;
     }
 
-    public void setScienceTheme(String scienceTheme) {
-        this.scienceTheme = scienceTheme;
+    public void setScienceThemeId(String scienceThemeId) {
+        this.scienceThemeId = scienceThemeId;
     }
 }

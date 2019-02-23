@@ -1,4 +1,4 @@
-package dao;
+package dao.config;
 
 import com.mysql.cj.jdbc.Driver;
 import util.UniverConst;
