@@ -13,6 +13,8 @@ public class MainForm extends JFrame {
     private JButton deleteButton;
     private JButton editButton;
     private JButton addButton;
+    private JLabel cathedraLabel;
+    private JLabel chiefLabel;
 
     public MainForm(MasterService masterService){
         this.masterService = masterService;
@@ -23,8 +25,12 @@ public class MainForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    void configTable(){
+    private void configTable(){
         MastersTableModel model = new MastersTableModel(masterService.getMastersForMainTable());
         table1.setModel(model);
+    }
+
+    private void setContentOfCathedras(){
+
     }
 }
