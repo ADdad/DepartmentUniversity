@@ -1,11 +1,11 @@
 package model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
-public class SciensistJob {
+public class ScientistJob {
     private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
     private String scientist;
     private String scienceTheme;
 
@@ -17,19 +17,19 @@ public class SciensistJob {
         this.name = name;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

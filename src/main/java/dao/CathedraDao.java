@@ -70,7 +70,7 @@ public class CathedraDao implements BaseDao<Cathedra> {
     @Override
     public boolean update(Cathedra cathedra) {
         try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_SCIENTIST)) {
+             PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_CATHEDRA)) {
                 ps.setString(0, cathedra.getName());
                 ps.setString(1, cathedra.getPhoneNumber());
                 ps.setString(2, cathedra.getId());
