@@ -179,4 +179,30 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
         }
         return false;
     }
+
+    @Override
+    public boolean deleteAuthorFromWork(String authorId) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENTIST_FROM_WORK)) {
+            ps.setString(0, authorId);
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteThemeFromWork(String themeId) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_THEME_FROM_WORK)) {
+            ps.setString(0, themeId);
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

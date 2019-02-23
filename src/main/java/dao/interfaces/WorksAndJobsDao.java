@@ -16,4 +16,6 @@ public interface WorksAndJobsDao{
     boolean deleteScientistJob(ScientistJob scientistJob);
     boolean updateScientistJob(ScientistJob scientistJob);
     boolean updateScientificWork(ScientificWork scientificWork);
+    boolean deleteAuthorFromWork(String authorId);
+    boolean deleteThemeFromWork(String themeId);
 }
