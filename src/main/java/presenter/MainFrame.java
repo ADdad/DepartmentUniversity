@@ -1,6 +1,7 @@
 package presenter;
 
-import model.Master;
+import dto.MasterMainDto;
+import service.MasterService;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -8,9 +9,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MastersTable {
+public class MainFrame {
+    private MasterService masterService;
 
-    public MastersTable(List<Master> masters) {
+    public MainFrame(MasterService masterService) {
+        this.masterService = masterService;
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -20,10 +24,10 @@ public class MastersTable {
                     ex.printStackTrace();
                 }
 
-                ClickTableModel model = new ClickTableModel(masters);
+                MastersTableModel model = new MastersTableModel(masterService.getMastersForMainTable());
                 JTable table = new JTable(model);
 
-                JFrame frame = new JFrame("Testing");
+                JFrame frame = new JFrame("Masters");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.add(new JScrollPane(table));
                 frame.pack();
@@ -33,12 +37,13 @@ public class MastersTable {
         });
     }
 
-    public class ClickTableModel extends AbstractTableModel {
+    public class MastersTableModel extends AbstractTableModel {
+
 
         private static final int MAIN_TABLE_COLUMN_COUNT = 7;
-        private List<Master> masters;
+        private List<MasterMainDto> masters;
 
-        public ClickTableModel(List<Master> masters) {
+        public MastersTableModel(List<MasterMainDto> masters) {
             this.masters = new ArrayList<>(masters);
         }
 
@@ -49,7 +54,7 @@ public class MastersTable {
 
         @Override
         public int getColumnCount() {
-            return 5;
+            return MAIN_TABLE_COLUMN_COUNT;
         }
 
         @Override
@@ -112,14 +117,14 @@ public class MastersTable {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Master master = masters.get(rowIndex);
+            MasterMainDto master = masters.get(rowIndex);
             Object value = null;
             switch (columnIndex) {
                 case 0:
-                    value = master.getScientistId();
+                    value = master.getId();
                     break;
                 case 1:
-                    value = master.getSecondName();
+                    value = master.getName();
                     break;
                 case 2:
                     value = master.getGender();
@@ -128,13 +133,13 @@ public class MastersTable {
                     value = master.getDiplomaTheme();
                     break;
                 case 4:
-                    value = master.getStartDate();
+                    value = master.getStartOfMaster();
                     break;
                 case 5:
-                    value = master.getCathedraId();
+                    value = master.getCathedra().getName();
                     break;
                 case 6:
-                    value = master.getChiefId();
+                    value = master.getChief().getSecondName();
                     break;
             }
             return value;

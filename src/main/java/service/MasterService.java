@@ -39,7 +39,7 @@ public class MasterService {
 
     private MasterMainDto masterToMasterMainDto(Master master) {
         Cathedra mastersCathedra = cathedraDao.getById(master.getCathedraId());
-        Scientist chief = teacherDao.getById(master.getChiefId());
+        Scientist chief = getMastersChief(master.getChiefId());
         return new MasterMainDto(master.getScientistId(), chief, master.getSecondName(), master.getGender(),
                 master.getDiplomaTheme(), master.getStartDate(), mastersCathedra);
     }
