@@ -16,7 +16,7 @@ public class MasterDao implements BaseDao<Master> {
     public Master getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_MASTER_BY_ID)) {
-            stmt.setString(0, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return extractMasterFromRS(rs);
@@ -49,19 +49,19 @@ public class MasterDao implements BaseDao<Master> {
             //TODO add check if scientist exists
             PreparedStatement ps = connection.prepareStatement(SQLQueries.INSERT_SCIENSIST);
             String newId = UUID.randomUUID().toString();
-            ps.setString(0, newId);
-            ps.setString(1, scientist.getSecondName());
-            ps.setString(2, scientist.getPhoneNumber());
-            ps.setString(3, scientist.getGender());
+            ps.setString(1, newId);
+            ps.setString(2, scientist.getSecondName());
+            ps.setString(3, scientist.getPhoneNumber());
+            ps.setString(4, scientist.getGender());
             int i = ps.executeUpdate();
             ps = connection.prepareStatement(SQLQueries.INSERT_MASTER);
-            ps.setString(0, newId);
-            ps.setString(1, scientist.getCathedraId());
-            ps.setString(2, scientist.getChiefId());
-            ps.setString(3, scientist.getDiplomaTheme());
-            ps.setDate(4, scientist.getStartDate());
-            ps.setDate(5, scientist.getEndDate());
-            ps.setString(6, scientist.getEndReason());
+            ps.setString(1, newId);
+            ps.setString(2, scientist.getCathedraId());
+            ps.setString(3, scientist.getChiefId());
+            ps.setString(4, scientist.getDiplomaTheme());
+            ps.setDate(5, scientist.getStartDate());
+            ps.setDate(6, scientist.getEndDate());
+            ps.setString(7, scientist.getEndReason());
             i += ps.executeUpdate();
             ps.close();
             if (i == 2) {
@@ -93,7 +93,7 @@ public class MasterDao implements BaseDao<Master> {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_MASTER)) {
             //TODO add check if scientist exists
-            ps.setString(0, scientist.getScientistId());
+            ps.setString(1, scientist.getScientistId());
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -106,19 +106,19 @@ public class MasterDao implements BaseDao<Master> {
     public boolean update(Master scientist) {
         try (Connection connection = ConnectionFactory.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_SCIENTIST);
-            ps.setString(0, scientist.getSecondName());
-            ps.setString(1, scientist.getPhoneNumber());
-            ps.setString(2, scientist.getGender());
-            ps.setString(3, scientist.getScientistId());
+            ps.setString(1, scientist.getSecondName());
+            ps.setString(2, scientist.getPhoneNumber());
+            ps.setString(3, scientist.getGender());
+            ps.setString(4, scientist.getScientistId());
             int i = ps.executeUpdate();
             ps = connection.prepareStatement(SQLQueries.UPDATE_MASTER);
-            ps.setString(0, scientist.getCathedraId());
-            ps.setString(1, scientist.getChiefId());
-            ps.setString(2, scientist.getDiplomaTheme());
-            ps.setDate(3, scientist.getStartDate());
-            ps.setDate(4, scientist.getEndDate());
-            ps.setString(5, scientist.getEndReason());
-            ps.setString(6, scientist.getScientistId());
+            ps.setString(1, scientist.getCathedraId());
+            ps.setString(2, scientist.getChiefId());
+            ps.setString(3, scientist.getDiplomaTheme());
+            ps.setDate(4, scientist.getStartDate());
+            ps.setDate(5, scientist.getEndDate());
+            ps.setString(6, scientist.getEndReason());
+            ps.setString(7, scientist.getScientistId());
             i += ps.executeUpdate();
             return i == 2;
         } catch (SQLException se) {

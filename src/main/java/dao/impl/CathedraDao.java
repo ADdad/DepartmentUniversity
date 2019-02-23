@@ -15,10 +15,10 @@ public class CathedraDao implements BaseDao<Cathedra> {
     public Cathedra getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_CATHEDRA_BY_ID)) {
-            stmt.setString(0, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Cathedra(rs.getString(0), rs.getString(1), rs.getString(2));
+                return new Cathedra(rs.getString(1), rs.getString(2), rs.getString(3));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -30,9 +30,9 @@ public class CathedraDao implements BaseDao<Cathedra> {
     public boolean add(Cathedra cathedra) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.INSERT_CATHEDRA)) {
-            stmt.setString(0, UUID.randomUUID().toString());
-            stmt.setString(1, cathedra.getName());
-            stmt.setString(2, cathedra.getPhoneNumber());
+            stmt.setString(1, UUID.randomUUID().toString());
+            stmt.setString(2, cathedra.getName());
+            stmt.setString(3, cathedra.getPhoneNumber());
             int i = stmt.executeUpdate();
             return i == 1;
         } catch (SQLException e) {
@@ -47,7 +47,7 @@ public class CathedraDao implements BaseDao<Cathedra> {
         try (Connection connection = ConnectionFactory.getConnection(); Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(SQLQueries.GET_ALL_CATHEDRAS);
             while (rs.next()) {
-                Cathedra cathedra = new Cathedra(rs.getString(0), rs.getString(1), rs.getString(2));;
+                Cathedra cathedra = new Cathedra(rs.getString(1), rs.getString(2), rs.getString(3));
                 cathedras.add(cathedra);
             }
         } catch (SQLException ex) {
@@ -60,7 +60,7 @@ public class CathedraDao implements BaseDao<Cathedra> {
     public boolean delete(Cathedra cathedra) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_CATHEDRA)) {
-            ps.setString(0, cathedra.getId());
+            ps.setString(1, cathedra.getId());
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -73,9 +73,9 @@ public class CathedraDao implements BaseDao<Cathedra> {
     public boolean update(Cathedra cathedra) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_CATHEDRA)) {
-                ps.setString(0, cathedra.getName());
-                ps.setString(1, cathedra.getPhoneNumber());
-                ps.setString(2, cathedra.getId());
+                ps.setString(1, cathedra.getName());
+                ps.setString(2, cathedra.getPhoneNumber());
+                ps.setString(3, cathedra.getId());
                 int i = ps.executeUpdate();
             return i == 1;
         } catch (SQLException se) {

@@ -10,11 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainFrame {
-    private MasterService masterService;
-
     public MainFrame(MasterService masterService) {
-        this.masterService = masterService;
-
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

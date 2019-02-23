@@ -15,7 +15,7 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
     public ScienceTheme getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_THEME_BY_ID)) {
-            stmt.setString(0, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return extractScienceThemeFromRS(rs);
@@ -43,13 +43,13 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.INSERT_SCIENCE_THEME);) {
             String newId = UUID.randomUUID().toString();
-            ps.setString(0, newId);
-            ps.setString(1, scienceTheme.getChiefId());
-            ps.setString(2, scienceTheme.getCathedraId());
-            ps.setString(3, scienceTheme.getName());
-            ps.setString(4, scienceTheme.getCustomer());
-            ps.setDate(5, scienceTheme.getStartDate());
-            ps.setDate(6, scienceTheme.getEndDate());
+            ps.setString(1, newId);
+            ps.setString(2, scienceTheme.getChiefId());
+            ps.setString(3, scienceTheme.getCathedraId());
+            ps.setString(4, scienceTheme.getName());
+            ps.setString(5, scienceTheme.getCustomer());
+            ps.setDate(6, scienceTheme.getStartDate());
+            ps.setDate(7, scienceTheme.getEndDate());
             int i = ps.executeUpdate();
             ps.close();
                 return i == 1;
@@ -77,7 +77,7 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
     public boolean delete(ScienceTheme scienceTheme) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENCE_THEME)) {
-            ps.setString(0, scienceTheme.getId());
+            ps.setString(1, scienceTheme.getId());
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -90,13 +90,13 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
     public boolean update(ScienceTheme scienceTheme) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_SCIENCE_THEME)) {
-            ps.setString(0, scienceTheme.getChiefId());
-            ps.setString(1, scienceTheme.getCathedraId());
-            ps.setString(2, scienceTheme.getName());
-            ps.setString(3, scienceTheme.getCustomer());
-            ps.setDate(4, scienceTheme.getStartDate());
-            ps.setDate(5, scienceTheme.getEndDate());
-            ps.setString(6, scienceTheme.getId());
+            ps.setString(1, scienceTheme.getChiefId());
+            ps.setString(2, scienceTheme.getCathedraId());
+            ps.setString(3, scienceTheme.getName());
+            ps.setString(4, scienceTheme.getCustomer());
+            ps.setDate(5, scienceTheme.getStartDate());
+            ps.setDate(6, scienceTheme.getEndDate());
+            ps.setString(7, scienceTheme.getId());
             int i = ps.executeUpdate();
             return i == 1;
         } catch (SQLException se) {

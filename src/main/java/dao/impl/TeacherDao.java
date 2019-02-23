@@ -16,7 +16,7 @@ public class TeacherDao implements BaseDao<Teacher> {
     public Teacher getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_TEACHER_BY_ID)) {
-            stmt.setString(0, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return extractTeacherFromRS(rs);
