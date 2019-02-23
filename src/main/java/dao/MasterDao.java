@@ -47,19 +47,19 @@ public class MasterDao implements BaseDao<Master> {
             //TODO add check if scientist exists
             PreparedStatement ps = connection.prepareStatement(SQLQueries.INSERT_SCIENSIST);
             String newId = UUID.randomUUID().toString();
-            ps.setString(1, newId);
-            ps.setString(2, scientist.getSecondName());
-            ps.setString(3, scientist.getPhoneNumber());
-            ps.setString(4, scientist.getGender());
+            ps.setString(0, newId);
+            ps.setString(1, scientist.getSecondName());
+            ps.setString(2, scientist.getPhoneNumber());
+            ps.setString(3, scientist.getGender());
             int i = ps.executeUpdate();
             ps = connection.prepareStatement(SQLQueries.INSERT_MASTER);
-            ps.setString(1, newId);
-            ps.setString(2, scientist.getCathedraId());
-            ps.setString(3, scientist.getChiefId());
-            ps.setString(4, scientist.getDiplomaTheme());
-            ps.setDate(5, scientist.getStartDate());
-            ps.setDate(6, scientist.getEndDate());
-            ps.setString(7, scientist.getEndReason());
+            ps.setString(0, newId);
+            ps.setString(1, scientist.getCathedraId());
+            ps.setString(2, scientist.getChiefId());
+            ps.setString(3, scientist.getDiplomaTheme());
+            ps.setDate(4, scientist.getStartDate());
+            ps.setDate(5, scientist.getEndDate());
+            ps.setString(6, scientist.getEndReason());
             i += ps.executeUpdate();
             ps.close();
             if (i == 2) {

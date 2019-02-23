@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 
 public class ScienceTheme {
@@ -9,8 +9,8 @@ public class ScienceTheme {
     private String cathedraId;
     private String name;
     private String customer;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Date startDate;
+    private Date endDate;
     private List<String> scientificWorks;
     private List<String> scientificJobs;
 
@@ -62,19 +62,19 @@ public class ScienceTheme {
         this.customer = customer;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
