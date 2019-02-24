@@ -98,14 +98,14 @@ public class ScientificJobsWindow extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AddMasterForm(masterService, table1);
+                new AddScientistJobForm(masterService, table1, masterId);
             }
         });
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                    //  new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
+                      new EditScientistJobForm(masterService, table1, masterService.getJobToEdit(getSelectedJobThemeId(), masterId));
                 }
             }
         });

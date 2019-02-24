@@ -1,0 +1,103 @@
+package presenter;
+
+import com.toedter.calendar.JDateChooser;
+import dto.ScientistJobDto;
+import model.ScienceTheme;
+import presenter.table.models.ScienceJobTableModel;
+import service.MasterService;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.util.Calendar;
+
+public class EditScientistJobForm extends JFrame {
+    private JPanel rootAddPanel;
+    private JTextField nameField;
+    private JTextField phoneField;
+    private JTextField genderField;
+    private JTextArea themeOfDiplomaArea;
+    private JPanel startDatePanel;
+    private JButton addButton;
+    private JButton cancelButton;
+    private JPanel endDatePanel;
+    private JTextField endReasonField;
+    private JComboBox scienceThemeBox;
+    private JComboBox chiefsBox;
+    private JLabel alertText;
+    private Calendar calendar = Calendar.getInstance();
+    private JDateChooser startDate = new JDateChooser(calendar.getTime());
+    private JDateChooser endDate = new JDateChooser();
+    private MasterService masterService;
+    private JTable rootTable;
+    private String masterId;
+
+    public EditScientistJobForm(MasterService masterService, JTable rootTable, String masterId) {
+        this.rootTable = rootTable;
+        this.masterService = masterService;
+        this.masterId = masterId;
+        setContentOfThemes();
+        setContentPane(rootAddPanel);
+        setVisible(true);
+        setSize(500, 500);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        alertText.setForeground(Color.red);
+
+        // Date fields
+        startDate.setDateFormatString("dd/MM/yyyy");
+        endDate.setDateFormatString("dd/MM/yyyy");
+        startDatePanel.add(startDate);
+        endDatePanel.add(endDate);
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ScientistJobDto jobEditDto = combineJobData();
+                if (validateInput()) {
+                    masterService.addJobToMaster(jobEditDto, masterId);
+                    rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
+                    dispose();
+                }
+            }
+        });
+    }
+
+    private ScientistJobDto combineJobData() {
+        ScientistJobDto scientistJobDto = new ScientistJobDto();
+        scientistJobDto.setName(nameField.getText());
+        scientistJobDto.setStartDate(new Date(startDate.getDate().getTime()));
+        if(endDate.getDate() != null){
+            scientistJobDto.setEndDate(new Date(endDate.getDate().getTime()));
+        }
+        scientistJobDto.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
+        return scientistJobDto;
+    }
+
+    private boolean validateInput() {
+        boolean validator = true;
+        if (nameField.getText().isEmpty()) {
+            validator = false;
+            nameField.setBorder(new LineBorder(Color.red, 1));
+        }
+        if (endDate.getDate() != null && startDate.getDate().after(endDate.getDate())) {
+            validator = false;
+            nameField.setBorder(new LineBorder(Color.red, 1));
+        }
+        if (!validator)
+            alertText.setVisible(true);
+        return validator;
+    }
+
+    private void setContentOfThemes() {
+        masterService.getScienceThemesValues().forEach(theme -> scienceThemeBox.addItem(theme));
+    }
+}

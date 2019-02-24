@@ -204,4 +204,9 @@ public class MasterService {
                 jobEditDto.getWorkerId(),
                 scienceTheme.getId()));
     }
+
+    public ScientistJobDto getJobToEdit(String selectedJobThemeId, String masterId) {
+       // worksAndJobsDao.getJ
+        return null;
+    }
 }
