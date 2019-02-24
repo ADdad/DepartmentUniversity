@@ -28,7 +28,7 @@ public class AddMasterForm extends JFrame {
 
         setContentPane(rootAddPanel);
         setVisible(true);
-        setSize(400, 400);
+        pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -37,9 +37,5 @@ public class AddMasterForm extends JFrame {
         endDate.setDateFormatString("dd/MM/yyyy");
         startDatePanel.add(startDate);
         endDatePanel.add(endDate);
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }

@@ -63,7 +63,9 @@
               </component>
               <component id="6e3ed" class="javax.swing.JTextField" binding="endReasonField">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <columns value="10"/>
+                </properties>
               </component>
             </children>
           </grid>
@@ -109,7 +111,7 @@
       </grid>
       <grid id="538dc" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <minimum-size width="40" height="-1"/>
           </grid>
         </constraints>
@@ -124,7 +126,9 @@
           </component>
           <component id="e8fc0" class="javax.swing.JTextField" binding="nameField">
             <constraints/>
-            <properties/>
+            <properties>
+              <columns value="10"/>
+            </properties>
           </component>
         </children>
       </grid>
@@ -143,7 +147,9 @@
           </component>
           <component id="64dca" class="javax.swing.JTextField" binding="phoneField">
             <constraints/>
-            <properties/>
+            <properties>
+              <columns value="10"/>
+            </properties>
           </component>
         </children>
       </grid>
@@ -162,7 +168,9 @@
           </component>
           <component id="3c47c" class="javax.swing.JTextField" binding="genderField">
             <constraints/>
-            <properties/>
+            <properties>
+              <columns value="10"/>
+            </properties>
           </component>
         </children>
       </grid>
@@ -176,12 +184,14 @@
           <component id="292ab" class="javax.swing.JLabel">
             <constraints/>
             <properties>
-              <text value="Theme of diploma"/>
+              <text value="Diploma theme"/>
             </properties>
           </component>
           <component id="3fe5c" class="javax.swing.JTextField" binding="themeOfDiplomaField">
             <constraints/>
-            <properties/>
+            <properties>
+              <columns value="10"/>
+            </properties>
           </component>
         </children>
       </grid>
