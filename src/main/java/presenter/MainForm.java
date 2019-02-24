@@ -60,7 +60,7 @@ public class MainForm extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AddMasterForm(masterService);
+                new AddMasterForm(masterService, table1);
                 System.out.println("wok");
             }
         });
