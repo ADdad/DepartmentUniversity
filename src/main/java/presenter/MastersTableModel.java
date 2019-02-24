@@ -9,7 +9,7 @@ import java.util.List;
 public class MastersTableModel extends AbstractTableModel {
 
 
-    private static final int MAIN_TABLE_COLUMN_COUNT = 7;
+    private static final int MAIN_TABLE_COLUMN_COUNT = 6;
     private List<MasterMainDto> masters;
 
     public MastersTableModel(List<MasterMainDto> masters) {
@@ -30,25 +30,25 @@ public class MastersTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         String name = "??";
         switch (column) {
+//            case 0:
+//                name = "Id";
+//                break;
             case 0:
-                name = "Id";
-                break;
-            case 1:
                 name = "Name";
                 break;
-            case 2:
+            case 1:
                 name = "Gender";
                 break;
-            case 3:
+            case 2:
                 name = "Theme";
                 break;
-            case 4:
+            case 3:
                 name = "Start of master";
                 break;
-            case 5:
+            case 4:
                 name = "Cathedra";
                 break;
-            case 6:
+            case 5:
                 name = "Chief";
                 break;
         }
@@ -59,6 +59,9 @@ public class MastersTableModel extends AbstractTableModel {
     public Class<?> getColumnClass(int columnIndex) {
         Class type = String.class;
         switch (columnIndex) {
+//            case 0:
+//                type = String.class;
+//                break;
             case 0:
                 type = String.class;
                 break;
@@ -75,9 +78,6 @@ public class MastersTableModel extends AbstractTableModel {
                 type = String.class;
                 break;
             case 5:
-                type = String.class;
-                break;
-            case 6:
                 type = String.class;
                 break;
         }
@@ -89,25 +89,25 @@ public class MastersTableModel extends AbstractTableModel {
         MasterMainDto master = masters.get(rowIndex);
         Object value = null;
         switch (columnIndex) {
-            case 0:
+            case -1:
                 value = master.getId();
                 break;
-            case 1:
+            case 0:
                 value = master.getName();
                 break;
-            case 2:
+            case 1:
                 value = master.getGender();
                 break;
-            case 3:
+            case 2:
                 value = master.getDiplomaTheme();
                 break;
-            case 4:
+            case 3:
                 value = master.getStartOfMaster();
                 break;
-            case 5:
+            case 4:
                 value = master.getCathedra().getName();
                 break;
-            case 6:
+            case 5:
                 value = master.getChief().getSecondName();
                 break;
         }

@@ -74,10 +74,10 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
     }
 
     @Override
-    public boolean delete(ScienceTheme scienceTheme) {
+    public boolean delete(String scienceThemeId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENCE_THEME)) {
-            ps.setString(1, scienceTheme.getId());
+            ps.setString(1, scienceThemeId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {

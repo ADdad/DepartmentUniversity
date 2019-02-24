@@ -47,4 +47,5 @@ public abstract class SQLQueries {
     public static final String DELETE_THEME_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ? AND theme_id = ?";
     public static final String GET_TEACHER_BY_ID = "SELECT * FROM scientists s INNER JOIN teachers t " +
             "ON s.scientist_id = t.scientist_id  WHERE s.scientist_id=?";
+    public static final String GET_ALL_TEACHERS = "SELECT * FROM scientists s INNER JOIN teachers m ON s.scientist_id = m.scientist_id";
 }

@@ -68,7 +68,7 @@
                   <text value="Cathedra"/>
                 </properties>
               </component>
-              <component id="4c33b" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+              <component id="4c33b" class="javax.swing.JComboBox" binding="cathedrasBox">
                 <constraints/>
                 <properties/>
               </component>
@@ -84,10 +84,10 @@
               <component id="483b1" class="javax.swing.JLabel" binding="chiefLabel">
                 <constraints/>
                 <properties>
-                  <text value="Label"/>
+                  <text value="Chief"/>
                 </properties>
               </component>
-              <component id="1f89f" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
+              <component id="1f89f" class="javax.swing.JComboBox" binding="chiefsBox">
                 <constraints/>
                 <properties/>
               </component>

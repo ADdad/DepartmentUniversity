@@ -89,11 +89,11 @@ public class MasterDao implements BaseDao<Master> {
     }
 
     @Override
-    public boolean delete(Master scientist) {
+    public boolean delete(String scientistId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_MASTER)) {
             //TODO add check if scientist exists
-            ps.setString(1, scientist.getScientistId());
+            ps.setString(1, scientistId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {

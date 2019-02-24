@@ -10,7 +10,7 @@ public interface BaseDao<Model> {
 
     List<Model> getAll();
 
-    boolean delete(Model model);
+    boolean delete(String id);
 
     boolean update(Model model);
 

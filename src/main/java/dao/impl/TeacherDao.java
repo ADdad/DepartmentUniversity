@@ -2,13 +2,12 @@ package dao.impl;
 
 import dao.config.ConnectionFactory;
 import dao.interfaces.BaseDao;
+import model.Master;
 import model.Teacher;
 import util.SQLQueries;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherDao implements BaseDao<Teacher> {
@@ -46,11 +45,21 @@ public class TeacherDao implements BaseDao<Teacher> {
 
     @Override
     public List<Teacher> getAll() {
-        return null;
+        List<Teacher> teachers = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection(); Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(SQLQueries.GET_ALL_TEACHERS);
+            while (rs.next()) {
+                Teacher teacher = extractTeacherFromRS(rs);
+                teachers.add(teacher);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return teachers;
     }
 
     @Override
-    public boolean delete(Teacher teacher) {
+    public boolean delete(String teacher) {
         return false;
     }
 

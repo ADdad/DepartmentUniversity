@@ -57,10 +57,10 @@ public class CathedraDao implements BaseDao<Cathedra> {
     }
 
     @Override
-    public boolean delete(Cathedra cathedra) {
+    public boolean delete(String cathedraId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_CATHEDRA)) {
-            ps.setString(1, cathedra.getId());
+            ps.setString(1, cathedraId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
