@@ -57,6 +57,12 @@ public class MainForm extends JFrame {
                 table1.setModel(new MastersTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
             }
         });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddMasterForm(masterService);
+            }
+        });
     }
 
     private void configTable(){

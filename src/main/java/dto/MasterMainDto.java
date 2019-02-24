@@ -14,6 +14,8 @@ public class MasterMainDto {
     private Date startOfMaster;
     private Cathedra cathedra;
 
+    public MasterMainDto(){}
+
     public MasterMainDto(String id, Scientist chief, String name, String gender, String diplomaTheme, Date startOfMaster, Cathedra cathedra) {
         this.id = id;
         this.chief = chief;
