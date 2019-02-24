@@ -6,6 +6,7 @@ import dao.interfaces.TeacherDao;
 import dao.interfaces.WorksAndJobsDao;
 import dto.MasterEditDto;
 import dto.MasterMainDto;
+import dto.ScientistJobDto;
 import model.*;
 
 import java.util.List;
@@ -128,5 +129,25 @@ public class MasterService {
         masterEditDto.setGender(master.getGender());
         masterEditDto.setName(master.getSecondName());
         return masterEditDto;
+    }
+
+    public List<ScientistJobDto> getMasterJobs(String id) {
+        return worksAndJobsDao.getScientistJobsByWorkerId(id).stream()
+                .map(this::migrateJobToDto)
+                .collect(Collectors.toList());
+    }
+
+    private ScientistJobDto migrateJobToDto(ScientistJob scientistJob) {
+        ScientistJobDto scientistJobDto = new ScientistJobDto();
+        scientistJobDto.setWorkerId(scientistJob.getWorkerId());
+        scientistJobDto.setEndDate(scientistJob.getEndDate());
+        scientistJobDto.setName(scientistJob.getName());
+        scientistJobDto.setStartDate(scientistJob.getStartDate());
+        scientistJobDto.setScienceTheme(scienceThemeDao.getById(scientistJob.getScienceThemeId()));
+        return scientistJobDto;
+    }
+
+    public void deleteMasterJob(String masterId, String selectedJobThemeId) {
+        worksAndJobsDao.deleteScientistJob(new ScientistJob(masterId, selectedJobThemeId));
     }
 }

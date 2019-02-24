@@ -23,27 +23,29 @@ public class ScientificJobsWindow extends JFrame {
     private JPanel endDatePanel;
     private JComboBox scienceThemeBox;
     private JButton backButton;
+    private String masterId;
 
-    public ScientificJobsWindow(MasterService masterService) {
+    public ScientificJobsWindow(MasterService masterService, String masterId) {
         this.masterService = masterService;
+        this.masterId = masterId;
         configTable();
         setContentOfCathedras();
         setContentOfChiefs();
         setContentPane(rootPanel);
         setVisible(true);
         pack();
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
                     int n = JOptionPane.showConfirmDialog(
                             rootPanel,
-                            "Would you like to delete selected master?",
-                            "Delete master",
+                            "Would you like to delete selected job?",
+                            "Delete job",
                             JOptionPane.YES_NO_OPTION);
                     if (n == 0) {
-                        deleteMaster();
+                        deleteJob();
                     }
                 }
             }
@@ -85,7 +87,7 @@ public class ScientificJobsWindow extends JFrame {
     }
 
     private void configTable() {
-        ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMastersForMainTable());
+        ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMasterJobs(masterId));
         table1.setModel(model);
         table1.setRowSelectionInterval(0, 0);
     }
@@ -102,13 +104,13 @@ public class ScientificJobsWindow extends JFrame {
         chiefsListForBox.forEach(chief -> chiefsBox.addItem(chief));
     }
 
-    private String getSelectedMasterId() {
+    private String getSelectedJobThemeId() {
         int row = table1.getSelectedRow();
-        return table1.getModel().getValueAt(row, -1).toString();
+        return table1.getModel().getValueAt(row, -2).toString();
     }
 
-    private void deleteMaster() {
-        masterService.deleteMaster(getSelectedMasterId());
-        table1.setModel(new ScienceJobTableModel(masterService.getMastersForMainTable()));
+    private void deleteJob() {
+        masterService.deleteMasterJob(masterId, getSelectedJobThemeId());
+        table1.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
     }
 }

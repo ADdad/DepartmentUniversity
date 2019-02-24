@@ -9,6 +9,13 @@ public class ScientistJob {
     private String workerId;
     private String scienceThemeId;
 
+    public ScientistJob(){}
+
+    public ScientistJob(String workerId, String scienceThemeId) {
+        this.workerId = workerId;
+        this.scienceThemeId = scienceThemeId;
+    }
+
     public String getName() {
         return name;
     }
