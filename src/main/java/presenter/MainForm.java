@@ -80,7 +80,7 @@ public class MainForm extends JFrame {
     private void deleteMaster(){
         int row = table1.getSelectedRow();
         String value = table1.getModel().getValueAt(row, -1).toString();
-        System.out.println(value);
-        //masterService.deleteMaster(value);
+        masterService.deleteMaster(value);
+        table1.setModel(new MastersTableModel(masterService.getMastersForMainTable()));
     }
 }
