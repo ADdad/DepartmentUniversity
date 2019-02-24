@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.config.ConnectionFactory;
 import dao.interfaces.BaseDao;
+import dao.interfaces.TeacherDao;
 import model.Master;
 import model.Teacher;
 import util.SQLQueries;
@@ -10,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherDao implements BaseDao<Teacher> {
+public class TeacherDaoImpl implements TeacherDao {
     @Override
     public Teacher getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
@@ -66,5 +67,20 @@ public class TeacherDao implements BaseDao<Teacher> {
     @Override
     public boolean update(Teacher teacher) {
         return false;
+    }
+
+    @Override
+    public Teacher getTeacherByName(String name) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_TEACHER_BY_NAME)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return extractTeacherFromRS(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

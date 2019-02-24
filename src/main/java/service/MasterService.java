@@ -2,6 +2,7 @@ package service;
 
 import dao.interfaces.BaseDao;
 import dao.interfaces.CathedraDao;
+import dao.interfaces.TeacherDao;
 import dao.interfaces.WorksAndJobsDao;
 import dto.MasterEditDto;
 import dto.MasterMainDto;
@@ -16,7 +17,7 @@ public class MasterService {
     private BaseDao<Master> masterDao;
     private CathedraDao cathedraDao;
     private BaseDao<ScienceTheme> scienceThemeDao;
-    private BaseDao<Teacher> teacherDao;
+    private TeacherDao teacherDao;
     private WorksAndJobsDao worksAndJobsDao;
 
     public MasterService(BaseDao<Master> masterDao,
@@ -89,6 +90,11 @@ public class MasterService {
 
 
     public void createMaster(MasterEditDto masterEditDto) {
-
+            Cathedra cathedra = cathedraDao.getByName(masterEditDto.getCathedraName());
+            Master newMaster = new Master();
+            newMaster.setSecondName(masterEditDto.getName());
+            newMaster.setGender(masterEditDto.getGender());
+            newMaster.setPhoneNumber(masterEditDto.getPhone());
+//            newMaster.setStartDate();
     }
 }

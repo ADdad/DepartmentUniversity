@@ -49,4 +49,5 @@ public abstract class SQLQueries {
             "ON s.scientist_id = t.scientist_id  WHERE s.scientist_id=?";
     public static final String GET_ALL_TEACHERS = "SELECT * FROM scientists s INNER JOIN teachers m ON s.scientist_id = m.scientist_id";
     public static final String GET_CATHEDRA_BY_NAME = "SELECT * FROM cathedras WHERE name = ?";
+    public static final String GET_TEACHER_BY_NAME = "SELECT * FROM teachers WHERE name = ?";
 }
