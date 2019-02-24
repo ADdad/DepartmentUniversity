@@ -61,7 +61,12 @@ public class MainForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AddMasterForm(masterService, table1);
-                System.out.println("wok");
+            }
+        });
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
             }
         });
     }
@@ -84,10 +89,13 @@ public class MainForm extends JFrame {
         chiefsListForBox.forEach(chief -> chiefsBox.addItem(chief));
     }
 
-    private void deleteMaster(){
+    private String getSelectedMasterId(){
         int row = table1.getSelectedRow();
-        String value = table1.getModel().getValueAt(row, -1).toString();
-        masterService.deleteMaster(value);
+        return table1.getModel().getValueAt(row, -1).toString();
+    }
+
+    private void deleteMaster(){
+        masterService.deleteMaster(getSelectedMasterId());
         table1.setModel(new MastersTableModel(masterService.getMastersForMainTable()));
     }
 }

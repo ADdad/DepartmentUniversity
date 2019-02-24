@@ -88,9 +88,14 @@ public class MasterService {
 
 
     public void createMaster(MasterEditDto masterEditDto) {
+        masterDao.add(extractMasterFromEditDto(masterEditDto));
+    }
+
+    private Master extractMasterFromEditDto(MasterEditDto masterEditDto) {
         Cathedra cathedra = cathedraDao.getByName(masterEditDto.getCathedraName());
         Teacher chief = teacherDao.getTeacherByName(masterEditDto.getChief());
         Master newMaster = new Master();
+        newMaster.setScientistId(masterEditDto.getId());
         newMaster.setSecondName(masterEditDto.getName());
         newMaster.setGender(masterEditDto.getGender());
         newMaster.setPhoneNumber(masterEditDto.getPhone());
@@ -100,6 +105,28 @@ public class MasterService {
         newMaster.setEndReason(masterEditDto.getEndReason());
         newMaster.setCathedraId(cathedra.getId());
         newMaster.setChiefId(chief.getScientistId());
-        masterDao.add(newMaster);
+        return newMaster;
+    }
+
+    public void updateMaster(MasterEditDto masterEditDto) {
+        masterDao.update(extractMasterFromEditDto(masterEditDto));
+    }
+
+    public MasterEditDto getMasterToEdit(String selectedMasterId) {
+        MasterEditDto masterEditDto = new MasterEditDto();
+        Master master = masterDao.getById(selectedMasterId);
+        Cathedra cathedra = cathedraDao.getById(master.getCathedraId());
+        Teacher chief = teacherDao.getById(master.getChiefId());
+        masterEditDto.setId(selectedMasterId);
+        masterEditDto.setChief(chief.getSecondName());
+        masterEditDto.setCathedraName(cathedra.getName());
+        masterEditDto.setEndReason(master.getEndReason());
+        masterEditDto.setEndDate(master.getEndDate());
+        masterEditDto.setStartDate(master.getStartDate());
+        masterEditDto.setThemeOfDiploma(master.getDiplomaTheme());
+        masterEditDto.setPhone(master.getPhoneNumber());
+        masterEditDto.setGender(master.getGender());
+        masterEditDto.setName(master.getSecondName());
+        return masterEditDto;
     }
 }
