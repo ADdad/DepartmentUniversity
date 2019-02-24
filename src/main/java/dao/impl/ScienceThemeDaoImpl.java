@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.config.ConnectionFactory;
 import dao.interfaces.BaseDao;
+import dao.interfaces.ScienceThemeDao;
 import model.ScienceTheme;
 import util.SQLQueries;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ScienceThemeDao implements BaseDao<ScienceTheme> {
+public class ScienceThemeDaoImpl implements ScienceThemeDao {
     @Override
     public ScienceTheme getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
@@ -103,5 +104,20 @@ public class ScienceThemeDao implements BaseDao<ScienceTheme> {
             se.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public ScienceTheme getByName(String name) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_THEME_BY_NAME)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return extractScienceThemeFromRS(rs);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
