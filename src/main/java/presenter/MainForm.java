@@ -31,13 +31,15 @@ public class MainForm extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               int n = JOptionPane.showConfirmDialog(
-                        rootPanel,
-                        "Would you like to delete selected master?",
-                        "Delete master",
-                        JOptionPane.YES_NO_OPTION);
-                if(n == 0){
-                    deleteMaster();
+                if (isRowSelected()) {
+                    int n = JOptionPane.showConfirmDialog(
+                            rootPanel,
+                            "Would you like to delete selected master?",
+                            "Delete master",
+                            JOptionPane.YES_NO_OPTION);
+                    if (n == 0) {
+                        deleteMaster();
+                    }
                 }
             }
         });
@@ -66,9 +68,15 @@ public class MainForm extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
+                if(isRowSelected()) {
+                    new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
+                }
             }
         });
+    }
+
+    private boolean isRowSelected(){
+        return table1.getSelectedRow() != -1;
     }
 
     private void configTable(){
