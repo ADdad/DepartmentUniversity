@@ -1,7 +1,7 @@
 package dao.impl;
 
 import dao.config.ConnectionFactory;
-import dao.interfaces.BaseDao;
+import dao.interfaces.CathedraDao;
 import model.Cathedra;
 import util.SQLQueries;
 
@@ -10,16 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CathedraDao implements BaseDao<Cathedra> {
+public class CathedraDaoImpl implements CathedraDao {
     @Override
     public Cathedra getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_CATHEDRA_BY_ID)) {
-            stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Cathedra(rs.getString(1), rs.getString(2), rs.getString(3));
-            }
+            Cathedra rs = getCathedraFromRS(id, stmt);
+            if (rs != null) return rs;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -82,5 +79,26 @@ public class CathedraDao implements BaseDao<Cathedra> {
             se.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public Cathedra getByName(String name) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_CATHEDRA_BY_NAME)) {
+            Cathedra rs = getCathedraFromRS(name, stmt);
+            if (rs != null) return rs;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private Cathedra getCathedraFromRS(String name, PreparedStatement stmt) throws SQLException {
+        stmt.setString(1, name);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return new Cathedra(rs.getString(1), rs.getString(2), rs.getString(3));
+        }
+        return null;
     }
 }

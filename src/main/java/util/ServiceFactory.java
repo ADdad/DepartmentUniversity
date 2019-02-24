@@ -1,16 +1,22 @@
 package util;
 
 import dao.impl.*;
+import dao.interfaces.BaseDao;
+import dao.interfaces.CathedraDao;
+import dao.interfaces.WorksAndJobsDao;
+import model.Master;
+import model.ScienceTheme;
+import model.Teacher;
 import service.MasterService;
 
 public class ServiceFactory {
 
     private static MasterService masterService;
-    private static MasterDao masterDao = new MasterDao();
-    private static CathedraDao cathedraDao = new CathedraDao();
-    private static ScienceThemeDao scienceThemeDao = new ScienceThemeDao();
-    private static TeacherDao teacherDao = new TeacherDao();
-    private static WorksAndJobsDaoImpl worksAndJobsDao = new WorksAndJobsDaoImpl();
+    private static BaseDao<Master> masterDao = new MasterDao();
+    private static CathedraDao cathedraDao = new CathedraDaoImpl();
+    private static BaseDao<ScienceTheme> scienceThemeDao = new ScienceThemeDao();
+    private static BaseDao<Teacher> teacherDao = new TeacherDao();
+    private static WorksAndJobsDao worksAndJobsDao = new WorksAndJobsDaoImpl();
 
     private ServiceFactory(){
     }

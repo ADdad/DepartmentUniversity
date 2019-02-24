@@ -1,7 +1,9 @@
 package service;
 
 import dao.interfaces.BaseDao;
+import dao.interfaces.CathedraDao;
 import dao.interfaces.WorksAndJobsDao;
+import dto.MasterEditDto;
 import dto.MasterMainDto;
 import model.*;
 
@@ -12,13 +14,13 @@ import java.util.stream.Collectors;
 public class MasterService {
 
     private BaseDao<Master> masterDao;
-    private BaseDao<Cathedra> cathedraDao;
+    private CathedraDao cathedraDao;
     private BaseDao<ScienceTheme> scienceThemeDao;
     private BaseDao<Teacher> teacherDao;
     private WorksAndJobsDao worksAndJobsDao;
 
     public MasterService(BaseDao<Master> masterDao,
-                         BaseDao<Cathedra> cathedraDao,
+                         CathedraDao cathedraDao,
                          BaseDao<ScienceTheme> scienceThemeDao,
                          BaseDao<Teacher> teacherDao,
                          WorksAndJobsDao worksAndJobsDao) {
@@ -85,8 +87,8 @@ public class MasterService {
         return true;
     }
 
-    public List<String> getChiefsNames(){
 
-        return null;
+    public void createMaster(MasterEditDto masterEditDto) {
+
     }
 }

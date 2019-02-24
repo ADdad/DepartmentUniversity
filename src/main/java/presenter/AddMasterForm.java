@@ -60,7 +60,7 @@ public class AddMasterForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 MasterEditDto masterEditDto1 = combineMasterData();
                 if (validateInput()) {
-
+                    masterService.createMaster(masterEditDto1);
                 }
             }
         });
