@@ -1,5 +1,6 @@
 package presenter;
 
+import presenter.table.models.MastersTableModel;
 import presenter.table.models.ScienceJobTableModel;
 import service.MasterService;
 
@@ -49,7 +50,7 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String cathedra = String.valueOf(cathedrasBox.getSelectedItem());
                 String chiefName = String.valueOf(chiefsBox.getSelectedItem());
-                table1.setModel(new ScienceJobTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
+                table1.setModel(new MastersTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
             }
         });
         chiefsBox.addActionListener(new ActionListener() {
@@ -57,7 +58,7 @@ public class MainForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String cathedra = String.valueOf(cathedrasBox.getSelectedItem());
                 String chiefName = String.valueOf(chiefsBox.getSelectedItem());
-                table1.setModel(new ScienceJobTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
+                table1.setModel(new MastersTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -81,7 +82,7 @@ public class MainForm extends JFrame {
     }
 
     private void configTable(){
-        ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMastersForMainTable());
+        MastersTableModel model = new MastersTableModel(masterService.getMastersForMainTable());
         table1.setModel(model);
         table1.setRowSelectionInterval(0, 0);
     }
@@ -105,6 +106,6 @@ public class MainForm extends JFrame {
 
     private void deleteMaster(){
         masterService.deleteMaster(getSelectedMasterId());
-        table1.setModel(new ScienceJobTableModel(masterService.getMastersForMainTable()));
+        table1.setModel(new MastersTableModel(masterService.getMastersForMainTable()));
     }
 }

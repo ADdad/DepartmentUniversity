@@ -1,14 +1,13 @@
 package service;
 
-import dao.interfaces.BaseDao;
-import dao.interfaces.CathedraDao;
-import dao.interfaces.TeacherDao;
-import dao.interfaces.WorksAndJobsDao;
+import dao.interfaces.*;
 import dto.MasterEditDto;
 import dto.MasterMainDto;
 import dto.ScientistJobDto;
 import model.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,13 +16,13 @@ public class MasterService {
 
     private BaseDao<Master> masterDao;
     private CathedraDao cathedraDao;
-    private BaseDao<ScienceTheme> scienceThemeDao;
+    private ScienceThemeDao scienceThemeDao;
     private TeacherDao teacherDao;
     private WorksAndJobsDao worksAndJobsDao;
 
     public MasterService(BaseDao<Master> masterDao,
                          CathedraDao cathedraDao,
-                         BaseDao<ScienceTheme> scienceThemeDao,
+                         ScienceThemeDao scienceThemeDao,
                          TeacherDao teacherDao,
                          WorksAndJobsDao worksAndJobsDao) {
         this.masterDao = masterDao;
@@ -149,5 +148,47 @@ public class MasterService {
 
     public void deleteMasterJob(String masterId, String selectedJobThemeId) {
         worksAndJobsDao.deleteScientistJob(new ScientistJob(masterId, selectedJobThemeId));
+    }
+
+    public List<ScientistJobDto> getFilteredJobs(String scienceThemeName, Date date, Date date1, String masterId) {
+        ScienceTheme scienceTheme = null;
+        if(scienceThemeName != null && !scienceThemeName.isEmpty()){
+            scienceTheme = scienceThemeDao.getByName(scienceThemeName);
+        }
+        List<ScientistJob> scientistJobs = worksAndJobsDao.getScientistJobsByWorkerId(masterId).stream()
+                .filter(job -> isJobBetweenDates(job, date, date1))
+                .collect(Collectors.toList());
+        List<ScientistJobDto> scientistJobDtos = new ArrayList<>();
+        for (ScientistJob job:
+             scientistJobs) {
+            if(scienceTheme != null && job.getScienceThemeId().equals(scienceTheme.getId())){
+                scientistJobDtos.add(migrateJobToDto(job));
+            }
+            else {
+                scientistJobDtos.add(migrateJobToDto(job));
+            }
+        }
+        return scientistJobDtos;
+    }
+
+    boolean isJobBetweenDates(ScientistJob scientistJob, Date startDate, Date endDate){
+        boolean isBetween = true;
+        if(startDate != null){
+            if(scientistJob.getEndDate() != null){
+                isBetween = (scientistJob.getStartDate().after(startDate) && scientistJob.getEndDate().after(startDate));
+            }
+            else {
+                isBetween = scientistJob.getStartDate().after(startDate);
+            }
+        }
+        if (endDate != null){
+            if(scientistJob.getEndDate() != null){
+                isBetween = isBetween && (scientistJob.getStartDate().before(endDate) && scientistJob.getEndDate().before(endDate));
+            }
+            else {
+                isBetween = isBetween && scientistJob.getStartDate().before(endDate);
+            }
+        }
+        return isBetween;
     }
 }

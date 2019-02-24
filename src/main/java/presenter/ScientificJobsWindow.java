@@ -1,11 +1,13 @@
 package presenter;
 
+import com.toedter.calendar.JDateChooser;
 import presenter.table.models.ScienceJobTableModel;
 import service.MasterService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.List;
 
 public class ScientificJobsWindow extends JFrame {
@@ -24,6 +26,9 @@ public class ScientificJobsWindow extends JFrame {
     private JComboBox scienceThemeBox;
     private JButton backButton;
     private String masterId;
+    private Calendar calendar = Calendar.getInstance();
+    private JDateChooser startDate = new JDateChooser();
+    private JDateChooser endDate = new JDateChooser();
 
     public ScientificJobsWindow(MasterService masterService, String masterId) {
         this.masterService = masterService;
@@ -35,6 +40,13 @@ public class ScientificJobsWindow extends JFrame {
         setVisible(true);
         pack();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        //Date fields
+        startDate.setDateFormatString("dd/MM/yyyy");
+        endDate.setDateFormatString("dd/MM/yyyy");
+        startDatePanel.add(startDate);
+        endDatePanel.add(endDate);
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,20 +62,14 @@ public class ScientificJobsWindow extends JFrame {
                 }
             }
         });
-        cathedrasBox.addActionListener(new ActionListener() {
+        scienceThemeBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cathedra = String.valueOf(cathedrasBox.getSelectedItem());
-                String chiefName = String.valueOf(chiefsBox.getSelectedItem());
-                table1.setModel(new ScienceJobTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
-            }
-        });
-        chiefsBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String cathedra = String.valueOf(cathedrasBox.getSelectedItem());
-                String chiefName = String.valueOf(chiefsBox.getSelectedItem());
-                table1.setModel(new ScienceJobTableModel(masterService.getFilteredMasters(cathedra, chiefName)));
+                String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
+                table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
+                        startDate.getDate(),
+                        endDate.getDate(),
+                        masterId)));
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -76,8 +82,14 @@ public class ScientificJobsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                    new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
+                  //  new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
                 }
+            }
+        });
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
         });
     }
