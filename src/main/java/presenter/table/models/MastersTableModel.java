@@ -1,4 +1,4 @@
-package presenter;
+package presenter.table.models;
 
 import dto.MasterMainDto;
 

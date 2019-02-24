@@ -2,6 +2,7 @@ package presenter;
 
 import com.toedter.calendar.JDateChooser;
 import dto.MasterEditDto;
+import presenter.table.models.ScienceJobTableModel;
 import service.MasterService;
 
 import javax.swing.*;
@@ -67,7 +68,7 @@ public class EditMasterForm extends JFrame {
                 MasterEditDto masterEditDto1 = combineMasterData();
                 if (validateInput()) {
                     masterService.updateMaster(masterEditDto1);
-                    mainTable.setModel(new MastersTableModel(masterService.getMastersForMainTable()));
+                    mainTable.setModel(new ScienceJobTableModel(masterService.getMastersForMainTable()));
                     dispose();
                 }
             }

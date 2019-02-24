@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class MainForm extends JFrame {
+public class ScientificJobsWindow extends JFrame {
     private MasterService masterService;
     private JPanel rootPanel;
     private JTable table1;
@@ -19,8 +19,12 @@ public class MainForm extends JFrame {
     private JButton addButton;
     private JLabel cathedraLabel;
     private JLabel chiefLabel;
+    private JPanel startDatePanel;
+    private JPanel endDatePanel;
+    private JComboBox scienceThemeBox;
+    private JButton backButton;
 
-    public MainForm(MasterService masterService){
+    public ScientificJobsWindow(MasterService masterService) {
         this.masterService = masterService;
         configTable();
         setContentOfCathedras();
@@ -69,41 +73,41 @@ public class MainForm extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(isRowSelected()) {
+                if (isRowSelected()) {
                     new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
                 }
             }
         });
     }
 
-    private boolean isRowSelected(){
+    private boolean isRowSelected() {
         return table1.getSelectedRow() != -1;
     }
 
-    private void configTable(){
+    private void configTable() {
         ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMastersForMainTable());
         table1.setModel(model);
         table1.setRowSelectionInterval(0, 0);
     }
 
-    private void setContentOfCathedras(){
+    private void setContentOfCathedras() {
         List<String> cathedrasListForBox = masterService.getCathedrasListForBox();
         cathedrasListForBox.add(0, "");
         cathedrasListForBox.forEach(cathedra -> cathedrasBox.addItem(cathedra));
     }
 
-    private void setContentOfChiefs(){
+    private void setContentOfChiefs() {
         List<String> chiefsListForBox = masterService.getChiefsListForBox();
         chiefsListForBox.add(0, "");
         chiefsListForBox.forEach(chief -> chiefsBox.addItem(chief));
     }
 
-    private String getSelectedMasterId(){
+    private String getSelectedMasterId() {
         int row = table1.getSelectedRow();
         return table1.getModel().getValueAt(row, -1).toString();
     }
 
-    private void deleteMaster(){
+    private void deleteMaster() {
         masterService.deleteMaster(getSelectedMasterId());
         table1.setModel(new ScienceJobTableModel(masterService.getMastersForMainTable()));
     }
