@@ -23,7 +23,7 @@ public class MasterService {
     public MasterService(BaseDao<Master> masterDao,
                          CathedraDao cathedraDao,
                          BaseDao<ScienceTheme> scienceThemeDao,
-                         BaseDao<Teacher> teacherDao,
+                         TeacherDao teacherDao,
                          WorksAndJobsDao worksAndJobsDao) {
         this.masterDao = masterDao;
         this.cathedraDao = cathedraDao;
@@ -48,41 +48,39 @@ public class MasterService {
                 master.getDiplomaTheme(), master.getStartDate(), mastersCathedra);
     }
 
-    public List<String> getCathedrasListForBox(){
+    public List<String> getCathedrasListForBox() {
         return cathedraDao.getAll().stream().map(Cathedra::getName).collect(Collectors.toList());
     }
 
-    public List<String> getChiefsListForBox(){
+    public List<String> getChiefsListForBox() {
         return teacherDao.getAll().stream()
                 .filter(this::isChief)
                 .map(Scientist::getSecondName)
                 .collect(Collectors.toList());
     }
 
-    private boolean isChief(Teacher teacher){
+    private boolean isChief(Teacher teacher) {
         Set<String> chiefsId = masterDao.getAll().stream().map(Master::getChiefId).collect(Collectors.toSet());
         return chiefsId.contains(teacher.getScientistId());
     }
 
-    public void deleteMaster(String id){
+    public void deleteMaster(String id) {
         masterDao.delete(id);
     }
 
-    public List<MasterMainDto> getFilteredMasters(String cathedra, String chiefName){
+    public List<MasterMainDto> getFilteredMasters(String cathedra, String chiefName) {
         return getMastersForMainTable().stream()
                 .filter(masterMainDto -> filterMasterByCathedraAndChief(masterMainDto, cathedra, chiefName))
                 .collect(Collectors.toList());
     }
 
-    private boolean filterMasterByCathedraAndChief(MasterMainDto masterMainDto, String cathedra, String chiefName){
-        if (cathedra != null && !cathedra.isEmpty() && chiefName != null && !chiefName.isEmpty()){
+    private boolean filterMasterByCathedraAndChief(MasterMainDto masterMainDto, String cathedra, String chiefName) {
+        if (cathedra != null && !cathedra.isEmpty() && chiefName != null && !chiefName.isEmpty()) {
             return masterMainDto.getCathedra().getName().equals(cathedra)
                     && masterMainDto.getChief().getSecondName().equals(chiefName);
-        }
-        else if(cathedra != null && !cathedra.isEmpty()){
+        } else if (cathedra != null && !cathedra.isEmpty()) {
             return masterMainDto.getCathedra().getName().equals(cathedra);
-        }
-        else if(chiefName != null && !chiefName.isEmpty()){
+        } else if (chiefName != null && !chiefName.isEmpty()) {
             return masterMainDto.getChief().getSecondName().equals(chiefName);
         }
         return true;
@@ -90,11 +88,18 @@ public class MasterService {
 
 
     public void createMaster(MasterEditDto masterEditDto) {
-            Cathedra cathedra = cathedraDao.getByName(masterEditDto.getCathedraName());
-            Master newMaster = new Master();
-            newMaster.setSecondName(masterEditDto.getName());
-            newMaster.setGender(masterEditDto.getGender());
-            newMaster.setPhoneNumber(masterEditDto.getPhone());
-//            newMaster.setStartDate();
+        Cathedra cathedra = cathedraDao.getByName(masterEditDto.getCathedraName());
+        Teacher chief = teacherDao.getTeacherByName(masterEditDto.getChief());
+        Master newMaster = new Master();
+        newMaster.setSecondName(masterEditDto.getName());
+        newMaster.setGender(masterEditDto.getGender());
+        newMaster.setPhoneNumber(masterEditDto.getPhone());
+        newMaster.setStartDate(masterEditDto.getStartDate());
+        newMaster.setEndDate(masterEditDto.getEndDate());
+        newMaster.setDiplomaTheme(masterEditDto.getThemeOfDiploma());
+        newMaster.setEndReason(masterEditDto.getEndReason());
+        newMaster.setCathedraId(cathedra.getId());
+        newMaster.setChiefId(chief.getScientistId());
+        masterDao.add(newMaster);
     }
 }

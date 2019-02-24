@@ -32,15 +32,17 @@ public class AddMasterForm extends JFrame {
     private JDateChooser startDate = new JDateChooser(calendar.getTime());
     private JDateChooser endDate = new JDateChooser();
     private MasterService masterService;
+    private JTable mainTable;
 
-    public AddMasterForm(MasterService masterService) {
+    public AddMasterForm(MasterService masterService, JTable mainTable) {
+        this.mainTable = mainTable;
         this.masterService = masterService;
         setContentOfCathedras();
         setContentOfChiefs();
         setContentPane(rootAddPanel);
         setVisible(true);
         setSize(500, 500);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         alertText.setForeground(Color.red);
 
@@ -61,6 +63,8 @@ public class AddMasterForm extends JFrame {
                 MasterEditDto masterEditDto1 = combineMasterData();
                 if (validateInput()) {
                     masterService.createMaster(masterEditDto1);
+                    mainTable.setModel(new MastersTableModel(masterService.getMastersForMainTable()));
+                    dispose();
                 }
             }
         });

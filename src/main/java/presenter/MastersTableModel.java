@@ -84,6 +84,11 @@ public class MastersTableModel extends AbstractTableModel {
         return type;
     }
 
+    private String getValueOrEmpty(String value){
+        if(value != null && !value.isEmpty())return value;
+        return "Empty";
+    }
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         MasterMainDto master = masters.get(rowIndex);
@@ -93,13 +98,13 @@ public class MastersTableModel extends AbstractTableModel {
                 value = master.getId();
                 break;
             case 0:
-                value = master.getName();
+                value = getValueOrEmpty(master.getName());
                 break;
             case 1:
-                value = master.getGender();
+                value = getValueOrEmpty(master.getGender());
                 break;
             case 2:
-                value = master.getDiplomaTheme();
+                value = getValueOrEmpty(master.getDiplomaTheme());
                 break;
             case 3:
                 value = master.getStartOfMaster();
@@ -108,7 +113,7 @@ public class MastersTableModel extends AbstractTableModel {
                 value = master.getCathedra().getName();
                 break;
             case 5:
-                value = master.getChief().getSecondName();
+                value = getValueOrEmpty(master.getChief().getSecondName());
                 break;
         }
         return value;
