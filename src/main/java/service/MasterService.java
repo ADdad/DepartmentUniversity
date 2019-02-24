@@ -191,4 +191,8 @@ public class MasterService {
         }
         return isBetween;
     }
+
+    public List<String> getScienceThemesValues() {
+        return scienceThemeDao.getAll().stream().map(ScienceTheme::getName).collect(Collectors.toList());
+    }
 }

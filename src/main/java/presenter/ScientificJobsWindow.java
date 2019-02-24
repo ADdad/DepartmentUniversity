@@ -7,6 +7,8 @@ import service.MasterService;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,8 +36,7 @@ public class ScientificJobsWindow extends JFrame {
         this.masterService = masterService;
         this.masterId = masterId;
         configTable();
-        setContentOfCathedras();
-        setContentOfChiefs();
+        setContentOfScienceThemes();
         setContentPane(rootPanel);
         setVisible(true);
         pack();
@@ -62,6 +63,28 @@ public class ScientificJobsWindow extends JFrame {
                 }
             }
         });
+        endDate.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
+                        table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
+                                startDate.getDate(),
+                                endDate.getDate(),
+                                masterId)));
+                    }
+                });
+        startDate.getDateEditor().addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent e) {
+                        String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
+                        table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
+                                startDate.getDate(),
+                                endDate.getDate(),
+                                masterId)));
+                    }
+                });
         scienceThemeBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,7 +105,7 @@ public class ScientificJobsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                  //  new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
+                    //  new EditMasterForm(masterService, table1, masterService.getMasterToEdit(getSelectedMasterId()));
                 }
             }
         });
@@ -104,16 +127,10 @@ public class ScientificJobsWindow extends JFrame {
         table1.setRowSelectionInterval(0, 0);
     }
 
-    private void setContentOfCathedras() {
-        List<String> cathedrasListForBox = masterService.getCathedrasListForBox();
-        cathedrasListForBox.add(0, "");
-        cathedrasListForBox.forEach(cathedra -> cathedrasBox.addItem(cathedra));
-    }
-
-    private void setContentOfChiefs() {
-        List<String> chiefsListForBox = masterService.getChiefsListForBox();
-        chiefsListForBox.add(0, "");
-        chiefsListForBox.forEach(chief -> chiefsBox.addItem(chief));
+    private void setContentOfScienceThemes() {
+        List<String> scienceThemesBox = masterService.getScienceThemesValues();
+        scienceThemesBox.add(0, "");
+        scienceThemesBox.forEach(chief -> chiefsBox.addItem(chief));
     }
 
     private String getSelectedJobThemeId() {
