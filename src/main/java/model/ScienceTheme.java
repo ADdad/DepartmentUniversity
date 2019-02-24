@@ -14,6 +14,12 @@ public class ScienceTheme {
     private List<String> scientificWorks;
     private List<String> scientificJobs;
 
+    public ScienceTheme(){}
+
+    public ScienceTheme(String name) {
+        this.name = name;
+    }
+
     public List<String> getScientificJobs() {
         return scientificJobs;
     }

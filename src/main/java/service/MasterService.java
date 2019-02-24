@@ -195,4 +195,13 @@ public class MasterService {
     public List<String> getScienceThemesValues() {
         return scienceThemeDao.getAll().stream().map(ScienceTheme::getName).collect(Collectors.toList());
     }
+
+    public void addJobToMaster(ScientistJobDto jobEditDto, String masterId) {
+        ScienceTheme scienceTheme = scienceThemeDao.getByName(jobEditDto.getScienceTheme().getName());
+        worksAndJobsDao.addScientistJob(new ScientistJob(jobEditDto.getName(),
+                jobEditDto.getStartDate(),
+                jobEditDto.getEndDate(),
+                jobEditDto.getWorkerId(),
+                scienceTheme.getId()));
+    }
 }

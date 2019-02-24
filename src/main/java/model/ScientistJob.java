@@ -11,6 +11,14 @@ public class ScientistJob {
 
     public ScientistJob(){}
 
+    public ScientistJob(String name, Date startDate, Date endDate, String workerId, String scienceThemeId) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.workerId = workerId;
+        this.scienceThemeId = scienceThemeId;
+    }
+
     public ScientistJob(String workerId, String scienceThemeId) {
         this.workerId = workerId;
         this.scienceThemeId = scienceThemeId;
