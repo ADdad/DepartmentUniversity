@@ -30,6 +30,7 @@ public class EditMasterForm extends JFrame {
     private JLabel alertText;
     private JButton workOnThemasButton;
     private JButton scientificWorksButton;
+    private JTextArea themeOfDiplomaArea;
     private Calendar calendar = Calendar.getInstance();
     private JDateChooser startDate = new JDateChooser(calendar.getTime());
     private JDateChooser endDate = new JDateChooser();
@@ -78,7 +79,7 @@ public class EditMasterForm extends JFrame {
         masterEditDto.setName(nameField.getText());
         masterEditDto.setGender(genderField.getText());
         masterEditDto.setPhone(phoneField.getText());
-        masterEditDto.setThemeOfDiploma(themeOfDiplomaField.getText());
+        masterEditDto.setThemeOfDiploma(themeOfDiplomaArea.getText());
         masterEditDto.setStartDate(new Date(startDate.getDate().getTime()));
         if (endDate.getDate() != null) {
             masterEditDto.setEndDate(new Date(endDate.getDate().getTime()));
@@ -98,7 +99,7 @@ public class EditMasterForm extends JFrame {
         nameField.setText(masterEditDto.getName());
         genderField.setText(masterEditDto.getGender());
         phoneField.setText(masterEditDto.getPhone());
-        themeOfDiplomaField.setText(getValueOrEmpty(masterEditDto.getThemeOfDiploma()));
+        themeOfDiplomaArea.setText(getValueOrEmpty(masterEditDto.getThemeOfDiploma()));
         startDate.setDate(new java.util.Date(masterEditDto.getStartDate().getTime()));
         if (masterEditDto.getEndDate() != null) {
             endDate.setDate(new java.util.Date(masterEditDto.getEndDate().getTime()));

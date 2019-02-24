@@ -187,10 +187,11 @@
               <text value="Diploma theme"/>
             </properties>
           </component>
-          <component id="3fe5c" class="javax.swing.JTextField" binding="themeOfDiplomaField">
+          <component id="7778c" class="javax.swing.JTextArea" binding="themeOfDiplomaArea">
             <constraints/>
             <properties>
               <columns value="10"/>
+              <rows value="3"/>
             </properties>
           </component>
         </children>

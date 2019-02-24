@@ -17,7 +17,7 @@ public class AddMasterForm extends JFrame {
     private JTextField nameField;
     private JTextField phoneField;
     private JTextField genderField;
-    private JTextField themeOfDiplomaField;
+    private JTextArea themeOfDiplomaArea;
     private JPanel startDatePanel;
     private JButton addButton;
     private JButton cancelButton;
@@ -75,7 +75,7 @@ public class AddMasterForm extends JFrame {
         masterEditDto.setName(nameField.getText());
         masterEditDto.setGender(genderField.getText());
         masterEditDto.setPhone(phoneField.getText());
-        masterEditDto.setThemeOfDiploma(themeOfDiplomaField.getText());
+        masterEditDto.setThemeOfDiploma(themeOfDiplomaArea.getText());
         masterEditDto.setStartDate(new Date(startDate.getDate().getTime()));
         if(endDate.getDate() != null) {
             masterEditDto.setEndDate(new Date(endDate.getDate().getTime()));
