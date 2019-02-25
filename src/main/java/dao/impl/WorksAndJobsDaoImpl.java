@@ -84,8 +84,18 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_JOB_BY_ID)) {
             stmt.setString(1, id);
-            ScientistJob rs = extractScientistJobFromRS(stmt.executeQuery());
-            if (rs != null) return rs;
+            ResultSet rs = stmt.executeQuery();
+            ScientistJob scientistJob = new ScientistJob();
+            if(rs.next()) {
+
+                scientistJob.setId(rs.getString("id"));
+                scientistJob.setWorkerId(rs.getString("worker_id"));
+                scientistJob.setScienceThemeId(rs.getString("science_theme_id"));
+                scientistJob.setName(rs.getString("name"));
+                scientistJob.setStartDate(rs.getDate("start_date"));
+                scientistJob.setEndDate(rs.getDate("end_date"));
+            }
+            return scientistJob;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -97,8 +107,16 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIFIC_WORK_BY_ID)) {
             stmt.setString(1, id);
-            ScientificWork rs = extractScientificWorkFromRS(stmt.executeQuery());
-            if (rs != null) return rs;
+            ResultSet rs = stmt.executeQuery();
+            ScientificWork scientificWork = new ScientificWork();
+            if(rs.next()) {
+
+                scientificWork.setId(rs.getString("sw.id"));
+                scientificWork.setName(rs.getString("sw.name"));
+                scientificWork.setJobType(rs.getString("sw.work_type"));
+                scientificWork.setYearOfJob(rs.getInt("sw.year_of_job"));
+            }
+            return scientificWork;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -196,7 +214,8 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             ps.setDate(2, scientistJob.getEndDate());
             ps.setString(3, scientistJob.getScienceThemeId());
             ps.setString(4, scientistJob.getWorkerId());
-            ps.setString(5, scientistJob.getId());
+            ps.setString(5, scientistJob.getName());
+            ps.setString(6, scientistJob.getId());
             int i = ps.executeUpdate();
             return i == 1;
         } catch (SQLException se) {
@@ -222,10 +241,11 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     }
 
     @Override
-    public boolean deleteAuthorFromWork(String authorId) {
+    public boolean deleteAuthorFromWork(String authorId, String workId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENTIST_FROM_WORK)) {
-            ps.setString(1, authorId);
+            ps.setString(1, workId);
+            ps.setString(2, authorId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -235,10 +255,11 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     }
 
     @Override
-    public boolean deleteThemeFromWork(String themeId) {
+    public boolean deleteThemeFromWork(String themeId, String workId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_THEME_FROM_WORK)) {
-            ps.setString(1, themeId);
+            ps.setString(1, workId);
+            ps.setString(2, themeId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -269,6 +290,32 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             stmt.setString(2, themeId);
             int i = stmt.executeUpdate();
             return i == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllThemesFromWork(String workId) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_ALL_THEMES_FROM_WORK)) {
+            ps.setString(1, workId);
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllAuthorsFromWork(String workId) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_ALL_AUTHORS_FROM_WORK)) {
+            ps.setString(1, workId);
+            int i = ps.executeUpdate();
+            return i > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }

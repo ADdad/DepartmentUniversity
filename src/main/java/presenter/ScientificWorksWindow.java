@@ -1,17 +1,12 @@
 package presenter;
 
-import com.toedter.calendar.JDateChooser;
 import presenter.table.models.MultiLineTableCellRenderer;
-import presenter.table.models.ScienceJobTableModel;
 import presenter.table.models.WorkTableModel;
 import service.MasterService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Calendar;
 import java.util.List;
 
 public class ScientificWorksWindow extends JFrame {
@@ -51,7 +46,7 @@ public class ScientificWorksWindow extends JFrame {
                             "Delete job",
                             JOptionPane.YES_NO_OPTION);
                     if (n == 0) {
-                        deleteJob();
+                        deleteWork();
                     }
                 }
             }
@@ -82,7 +77,7 @@ public class ScientificWorksWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                    //  new EditScienceJobForm(masterService, table1, masterService.getWorkToEdit(getSelectedWorkId()));
+                    new EditWorkForm(masterService, table1, masterService.getWorkToEdit(getSelectedWorkId()), masterId);
                 }
             }
         });
@@ -104,7 +99,7 @@ public class ScientificWorksWindow extends JFrame {
         MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
         table1.setDefaultRenderer(String[].class, renderer);
         table1.setRowHeight(100);
-        if(table1.getModel().getRowCount() > 0) table1.setRowSelectionInterval(0, 0);
+        if (table1.getModel().getRowCount() > 0) table1.setRowSelectionInterval(0, 0);
     }
 
     private void setContentOfScienceThemes() {
@@ -124,8 +119,8 @@ public class ScientificWorksWindow extends JFrame {
         return table1.getModel().getValueAt(row, -1).toString();
     }
 
-    private void deleteJob() {
-        masterService.deleteMasterJob(getSelectedWorkId());
+    private void deleteWork() {
+        masterService.deleteMasterWork(getSelectedWorkId(), masterId);
         table1.setModel(new WorkTableModel(masterService.getMastersWorks(masterId)));
     }
 }

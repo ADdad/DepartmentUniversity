@@ -94,11 +94,11 @@ public class EditScienceJobForm extends JFrame {
 
     private boolean validateInput() {
         boolean validator = true;
-        if (nameField.getText().isEmpty()) {
+        if (this.nameField.getText().isEmpty()) {
             validator = false;
             nameField.setBorder(new LineBorder(Color.red, 1));
         }
-        if (endDate.getDate() != null && startDate.getDate().after(endDate.getDate())) {
+        if (this.endDate.getDate() != null && startDate.getDate().after(endDate.getDate())) {
             validator = false;
             nameField.setBorder(new LineBorder(Color.red, 1));
         }

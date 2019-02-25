@@ -20,7 +20,7 @@ public class ScientistJob {
         this.id = id;
     }
 
-    public ScientistJob(String name, Date startDate, Date endDate, String workerId, String scienceThemeId) {
+    public ScientistJob(String id, String name, Date startDate, Date endDate, String workerId, String scienceThemeId) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

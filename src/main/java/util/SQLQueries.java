@@ -52,9 +52,11 @@ public abstract class SQLQueries {
     public static final String GET_TEACHER_BY_NAME = "SELECT * FROM scientists s INNER JOIN teachers m " +
             "ON s.scientist_id = m.scientist_id WHERE second_name = ?";
     public static final String GET_SCIENCE_THEME_BY_NAME = "SELECT * FROM science_themes WHERE name = ?";
-    public static final String GET_SCIENTIFIC_WORK_BY_ID = "SELECT * FROM scientific_works WHERE id = ?";
+    public static final String GET_SCIENTIFIC_WORK_BY_ID = "SELECT * FROM scientific_works sw WHERE id = ?";
     public static final String GET_SCIENCE_JOB_BY_ID = "SELECT * FROM sc_themes_scientists WHERE id = ?";
     public static final String GET_SCIENCE_THEMES_OF_WORK = "SELECT * FROM science_themes st INNER JOIN sc_works_sc_themes wt " +
             "ON st.id=wt.theme_id WHERE work_id = ?";
     public static final String GET_SCIENTIST_BY_NAME = "SELECT * FROM scientists WHERE second_name = ?";
+    public static final String DELETE_ALL_THEMES_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ?";
+    public static final String DELETE_ALL_AUTHORS_FROM_WORK = "DELETE FROM sc_works_scientists WHERE work_id = ?";
 }

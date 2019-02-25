@@ -207,7 +207,7 @@ public class MasterService {
 
     public void addJobToMaster(ScientistJobDto jobEditDto) {
         ScienceTheme scienceTheme = scienceThemeDao.getByName(jobEditDto.getScienceTheme().getName());
-        worksAndJobsDao.addScientistJob(new ScientistJob(jobEditDto.getName(),
+        worksAndJobsDao.addScientistJob(new ScientistJob(null, jobEditDto.getName(),
                 jobEditDto.getStartDate(),
                 jobEditDto.getEndDate(),
                 jobEditDto.getWorkerId(),
@@ -220,7 +220,8 @@ public class MasterService {
 
     public void updateJobOfMaster(ScientistJobDto jobEditDto) {
         ScienceTheme scienceTheme = scienceThemeDao.getByName(jobEditDto.getScienceTheme().getName());
-        worksAndJobsDao.addScientistJob(new ScientistJob(jobEditDto.getName(),
+        worksAndJobsDao.updateScientistJob(new ScientistJob(jobEditDto.getId(),
+                jobEditDto.getName(),
                 jobEditDto.getStartDate(),
                 jobEditDto.getEndDate(),
                 jobEditDto.getWorkerId(),
@@ -280,5 +281,40 @@ public class MasterService {
         return authors.stream().filter(sc -> !sc.getScientistId().equals(masterId))
                 .map(Scientist::getSecondName)
                 .collect(Collectors.toList());
+    }
+
+    private void dropWorkContacts(String workId){
+        worksAndJobsDao.deleteAllAuthorsFromWork(workId);
+        worksAndJobsDao.deleteAllThemesFromWork(workId);
+    }
+
+    public void updateWork(ScientificWorkDto workDto, String masterId) {
+        ScientificWork scientificWork = new ScientificWork();
+        scientificWork.setName(workDto.getName());
+        scientificWork.setJobType(workDto.getJobType());
+        scientificWork.setYearOfJob(workDto.getYearOfJob());
+        scientificWork.setId(workDto.getId());
+        worksAndJobsDao.updateScientificWork(scientificWork);
+        dropWorkContacts(workDto.getId());
+        for (String themeName :
+                workDto.getThemeNames()) {
+            worksAndJobsDao.addWorkToTheme(workDto.getId(), scienceThemeDao.getByName(themeName).getId());
+        }
+        worksAndJobsDao.addWorkToScientist(workDto.getId(), masterId);
+        for (String authorName :
+                workDto.getAuthorsNames()) {
+            worksAndJobsDao.addWorkToScientist(workDto.getId(), scientistBaseDao.getByName(authorName).getScientistId());
+        }
+    }
+
+    public ScientificWorkDto getWorkToEdit(String selectedWorkId) {
+        return migrateWorkToDto(worksAndJobsDao.getScientificWorkId(selectedWorkId));
+    }
+
+    public void deleteMasterWork(String selectedWorkId, String masterId) {
+        if(worksAndJobsDao.getScientificWorksByAuthorId(masterId).size() > 0){
+            worksAndJobsDao.deleteAuthorFromWork(masterId, selectedWorkId);
+        }
+        else worksAndJobsDao.deleteScientificWork(selectedWorkId);
     }
 }
