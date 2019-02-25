@@ -33,7 +33,7 @@ public abstract class SQLQueries {
             "science_theme_id = ?, worker_id = ?, name = ? WHERE id = ?";
     public static final String INSERT_SCIENTIST_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?, ?, ?)";
     public static final String INSERT_SCIENTIFIC_WORK = "INSERT INTO scientific_works VALUES (?, ?, ?, ?)";
-    public static final String GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID = "SELECT * FROM scientific_works sw INNER JOIN" +
+    public static final String GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID = "SELECT * FROM scientific_works sw INNER JOIN " +
             "sc_works_scientists ss ON sw.id = ss.work_id WHERE ss.author_id = ?";
     public static final String GET_SCIENTIFIC_WORKS_BY_THEME_ID = "SELECT * FROM scientific_works sw INNER JOIN" +
             "sc_works_sc_themes st ON sw.id = st.work_id WHERE st.theme_id = ?";
@@ -54,4 +54,6 @@ public abstract class SQLQueries {
     public static final String GET_SCIENCE_THEME_BY_NAME = "SELECT * FROM science_themes WHERE name = ?";
     public static final String GET_SCIENTIFIC_WORK_BY_ID = "SELECT * FROM scientific_works WHERE id = ?";
     public static final String GET_SCIENCE_JOB_BY_ID = "SELECT * FROM sc_themes_scientists WHERE id = ?";
+    public static final String GET_SCIENCE_THEMES_OF_WORK = "SELECT * FROM science_themes st INNER JOIN sc_works_sc_themes wt " +
+            "ON st.id=wt.theme_id WHERE work_id = ?";
 }

@@ -3,13 +3,11 @@ package service;
 import dao.interfaces.*;
 import dto.MasterEditDto;
 import dto.MasterMainDto;
+import dto.ScientificWorkDto;
 import dto.ScientistJobDto;
 import model.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MasterService {
@@ -147,46 +145,53 @@ public class MasterService {
         return scientistJobDto;
     }
 
+    private ScientificWorkDto migrateWorkToDto(ScientificWork scientificWork) {
+        ScientificWorkDto scientificWorkDto = new ScientificWorkDto();
+        scientificWorkDto.setId(scientificWork.getId());
+        scientificWorkDto.setJobType(scientificWork.getJobType());
+        scientificWorkDto.setName(scientificWork.getName());
+        scientificWorkDto.setYearOfJob(scientificWork.getYearOfJob());
+        scientificWorkDto.setScienceThemes(scienceThemeDao.getThemesOfWork(scientificWork.getId()));
+        return scientificWorkDto;
+    }
+
     public void deleteMasterJob(String id) {
         worksAndJobsDao.deleteScientistJob(id);
     }
 
     public List<ScientistJobDto> getFilteredJobs(String scienceThemeName, Date date, Date date1, String masterId) {
         ScienceTheme scienceTheme = null;
-        if(scienceThemeName != null && !scienceThemeName.isEmpty()){
+        if (scienceThemeName != null && !scienceThemeName.isEmpty()) {
             scienceTheme = scienceThemeDao.getByName(scienceThemeName);
         }
         List<ScientistJob> scientistJobs = worksAndJobsDao.getScientistJobsByWorkerId(masterId).stream()
                 .filter(job -> isJobBetweenDates(job, date, date1))
                 .collect(Collectors.toList());
         List<ScientistJobDto> scientistJobDtos = new ArrayList<>();
-        for (ScientistJob job:
-             scientistJobs) {
-            if(scienceTheme != null && job.getScienceThemeId().equals(scienceTheme.getId())){
+        for (ScientistJob job :
+                scientistJobs) {
+            if (scienceTheme != null && job.getScienceThemeId().equals(scienceTheme.getId())) {
                 scientistJobDtos.add(migrateJobToDto(job));
-            }
-            else {
+            } else {
                 scientistJobDtos.add(migrateJobToDto(job));
             }
         }
         return scientistJobDtos;
     }
 
-    boolean isJobBetweenDates(ScientistJob scientistJob, Date startDate, Date endDate){
+    boolean isJobBetweenDates(ScientistJob scientistJob, Date startDate, Date endDate) {
         boolean isBetween = true;
-        if(startDate != null){
-            if(scientistJob.getEndDate() != null){
+        if (startDate != null) {
+            if (scientistJob.getEndDate() != null) {
                 isBetween = (scientistJob.getStartDate().after(startDate) && scientistJob.getEndDate().after(startDate));
-            }
-            else {
+            } else {
                 isBetween = scientistJob.getStartDate().after(startDate);
             }
         }
-        if (endDate != null){
-            if(scientistJob.getEndDate() != null){
+        if (endDate != null) {
+            if (scientistJob.getEndDate() != null) {
                 isBetween = isBetween && (scientistJob.getStartDate().before(endDate) && scientistJob.getEndDate().before(endDate));
-            }
-            else {
+            } else {
                 isBetween = isBetween && scientistJob.getStartDate().before(endDate);
             }
         }
@@ -207,7 +212,7 @@ public class MasterService {
     }
 
     public ScientistJobDto getJobToEdit(String jobId) {
-       return migrateJobToDto(worksAndJobsDao.getScientistJobById(jobId));
+        return migrateJobToDto(worksAndJobsDao.getScientistJobById(jobId));
     }
 
     public void updateJobOfMaster(ScientistJobDto jobEditDto) {
@@ -217,5 +222,36 @@ public class MasterService {
                 jobEditDto.getEndDate(),
                 jobEditDto.getWorkerId(),
                 scienceTheme.getId()));
+    }
+
+    public List<ScientificWorkDto> getMastersWorks(String masterId) {
+        return worksAndJobsDao.getScientificWorksByAuthorId(masterId).stream()
+                .map(this::migrateWorkToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getYearsValues(String masterId) {
+        return worksAndJobsDao.getScientificWorksByAuthorId(masterId).stream()
+                .map(ScientificWork::getYearOfJob)
+                .map(Objects::toString)
+                .collect(Collectors.toList());
+    }
+
+    public List<ScientificWorkDto> getFilteredWorks(String scienceThemeName, String year, String masterId) {
+        return getMastersWorks(masterId).stream()
+                .filter(sw -> isInThemeAndYear(sw, scienceThemeName, year))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isInThemeAndYear(ScientificWorkDto scientificWorkDto, String scienceThemeName, String year) {
+        boolean validated = true;
+        if (year != null && !year.isEmpty()) {
+            validated = year.equals(Integer.toString(scientificWorkDto.getYearOfJob()));
+        }
+        if (validated && scienceThemeName != null && !scienceThemeName.isEmpty()) {
+            Set<String> themes = scientificWorkDto.getScienceThemes().stream().map(ScienceTheme::getName).collect(Collectors.toSet());
+            validated = themes.contains(scienceThemeName);
+        }
+        return validated;
     }
 }

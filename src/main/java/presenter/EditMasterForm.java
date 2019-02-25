@@ -80,6 +80,12 @@ public class EditMasterForm extends JFrame {
                 new ScientificJobsWindow(masterService, masterEditDto.getId());
             }
         });
+        scientificWorksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ScientificWorksWindow(masterService, masterEditDto.getId());
+            }
+        });
     }
 
     private MasterEditDto combineMasterData() {

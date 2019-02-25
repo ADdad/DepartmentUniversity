@@ -1,7 +1,9 @@
 package presenter;
 
 import com.toedter.calendar.JDateChooser;
+import presenter.table.models.MultiLineTableCellRenderer;
 import presenter.table.models.ScienceJobTableModel;
+import presenter.table.models.WorkTableModel;
 import service.MasterService;
 
 import javax.swing.*;
@@ -12,7 +14,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.List;
 
-public class ScientificJobsWindow extends JFrame {
+public class ScientificWorksWindow extends JFrame {
     private MasterService masterService;
     private JPanel rootPanel;
     private JTable table1;
@@ -21,32 +23,23 @@ public class ScientificJobsWindow extends JFrame {
     private JButton deleteButton;
     private JButton editButton;
     private JButton addButton;
-    private JLabel cathedraLabel;
-    private JLabel chiefLabel;
     private JPanel startDatePanel;
     private JPanel endDatePanel;
     private JComboBox scienceThemeBox;
     private JButton backButton;
+    private JComboBox yearsBox;
     private String masterId;
-    private Calendar calendar = Calendar.getInstance();
-    private JDateChooser startDate = new JDateChooser();
-    private JDateChooser endDate = new JDateChooser();
 
-    public ScientificJobsWindow(MasterService masterService, String masterId) {
+    public ScientificWorksWindow(MasterService masterService, String masterId) {
         this.masterService = masterService;
         this.masterId = masterId;
         configTable();
         setContentOfScienceThemes();
+        setContentOfYearsBox();
         setContentPane(rootPanel);
         setVisible(true);
         pack();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        //Date fields
-        startDate.setDateFormatString("dd/MM/yyyy");
-        endDate.setDateFormatString("dd/MM/yyyy");
-        startDatePanel.add(startDate);
-        endDatePanel.add(endDate);
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
@@ -54,7 +47,7 @@ public class ScientificJobsWindow extends JFrame {
                 if (isRowSelected()) {
                     int n = JOptionPane.showConfirmDialog(
                             rootPanel,
-                            "Would you like to delete selected job?",
+                            "Would you like to delete selected work?",
                             "Delete job",
                             JOptionPane.YES_NO_OPTION);
                     if (n == 0) {
@@ -63,36 +56,20 @@ public class ScientificJobsWindow extends JFrame {
                 }
             }
         });
-        endDate.getDateEditor().addPropertyChangeListener(
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent e) {
-                        String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
-                        table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
-                                startDate.getDate(),
-                                endDate.getDate(),
-                                masterId)));
-                    }
-                });
-        startDate.getDateEditor().addPropertyChangeListener(
-                new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent e) {
-                        String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
-                        table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
-                                startDate.getDate(),
-                                endDate.getDate(),
-                                masterId)));
-                    }
-                });
         scienceThemeBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
-                table1.setModel(new ScienceJobTableModel(masterService.getFilteredJobs(scienceThemeName,
-                        startDate.getDate(),
-                        endDate.getDate(),
-                        masterId)));
+                String year = String.valueOf(yearsBox.getSelectedItem());
+                table1.setModel(new WorkTableModel(masterService.getFilteredWorks(scienceThemeName, year, masterId)));
+            }
+        });
+        yearsBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String scienceThemeName = String.valueOf(scienceThemeBox.getSelectedItem());
+                String year = String.valueOf(yearsBox.getSelectedItem());
+                table1.setModel(new WorkTableModel(masterService.getFilteredWorks(scienceThemeName, year, masterId)));
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -105,7 +82,7 @@ public class ScientificJobsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                      new EditScienceJobForm(masterService, table1, masterService.getJobToEdit(getSelectedJobId()));
+                    //  new EditScienceJobForm(masterService, table1, masterService.getWorkToEdit(getSelectedWorkId()));
                 }
             }
         });
@@ -122,8 +99,11 @@ public class ScientificJobsWindow extends JFrame {
     }
 
     private void configTable() {
-        ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMasterJobs(masterId));
+        WorkTableModel model = new WorkTableModel(masterService.getMastersWorks(masterId));
         table1.setModel(model);
+        MultiLineTableCellRenderer renderer = new MultiLineTableCellRenderer();
+        table1.setDefaultRenderer(String[].class, renderer);
+        table1.setRowHeight(100);
         if(table1.getModel().getRowCount() > 0) table1.setRowSelectionInterval(0, 0);
     }
 
@@ -133,13 +113,19 @@ public class ScientificJobsWindow extends JFrame {
         scienceThemesBox.forEach(chief -> scienceThemeBox.addItem(chief));
     }
 
-    private String getSelectedJobId() {
+    private void setContentOfYearsBox() {
+        List<String> yearsValues = masterService.getYearsValues(masterId);
+        yearsValues.add(0, "");
+        yearsValues.forEach(year -> yearsBox.addItem(year));
+    }
+
+    private String getSelectedWorkId() {
         int row = table1.getSelectedRow();
-        return table1.getModel().getValueAt(row, -3).toString();
+        return table1.getModel().getValueAt(row, -1).toString();
     }
 
     private void deleteJob() {
-        masterService.deleteMasterJob(getSelectedJobId());
-        table1.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
+        masterService.deleteMasterJob(getSelectedWorkId());
+        table1.setModel(new WorkTableModel(masterService.getMastersWorks(masterId)));
     }
 }

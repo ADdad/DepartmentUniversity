@@ -1,7 +1,6 @@
 package dao.impl;
 
 import dao.config.ConnectionFactory;
-import dao.interfaces.BaseDao;
 import dao.interfaces.ScienceThemeDao;
 import model.ScienceTheme;
 import util.SQLQueries;
@@ -119,5 +118,22 @@ public class ScienceThemeDaoImpl implements ScienceThemeDao {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<ScienceTheme> getThemesOfWork(String workId) {
+        List<ScienceTheme> scienceThemes = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_THEMES_OF_WORK)) {
+            stmt.setString(1, workId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ScienceTheme scienceTheme = extractScienceThemeFromRS(rs);
+                scienceThemes.add(scienceTheme);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return scienceThemes;
     }
 }
