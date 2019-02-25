@@ -17,12 +17,15 @@ public class MasterService {
     private ScienceThemeDao scienceThemeDao;
     private TeacherDao teacherDao;
     private WorksAndJobsDao worksAndJobsDao;
+    private ScientistDao scientistBaseDao;
 
     public MasterService(BaseDao<Master> masterDao,
                          CathedraDao cathedraDao,
                          ScienceThemeDao scienceThemeDao,
                          TeacherDao teacherDao,
-                         WorksAndJobsDao worksAndJobsDao) {
+                         WorksAndJobsDao worksAndJobsDao,
+                         ScientistDao scientistBaseDao) {
+        this.scientistBaseDao = scientistBaseDao;
         this.masterDao = masterDao;
         this.cathedraDao = cathedraDao;
         this.scienceThemeDao = scienceThemeDao;
@@ -253,5 +256,29 @@ public class MasterService {
             validated = themes.contains(scienceThemeName);
         }
         return validated;
+    }
+
+    public void addWorkToMaster(ScientificWorkDto workDto, String masterId) {
+        ScientificWork scientificWork = new ScientificWork();
+        scientificWork.setName(workDto.getName());
+        scientificWork.setJobType(workDto.getJobType());
+        scientificWork.setYearOfJob(workDto.getYearOfJob());
+        String workId = worksAndJobsDao.addScientificWork(scientificWork);
+        for (String themeName :
+                workDto.getThemeNames()) {
+            worksAndJobsDao.addWorkToTheme(workId, scienceThemeDao.getByName(themeName).getId());
+        }
+        worksAndJobsDao.addWorkToScientist(workId, masterId);
+        for (String authorName :
+                workDto.getAuthorsNames()) {
+            worksAndJobsDao.addWorkToScientist(workId, scientistBaseDao.getByName(authorName).getScientistId());
+        }
+    }
+
+    public Collection<Object> getAuthors(String masterId) {
+        List<Scientist> authors = scientistBaseDao.getAll();
+        return authors.stream().filter(sc -> !sc.getScientistId().equals(masterId))
+                .map(Scientist::getSecondName)
+                .collect(Collectors.toList());
     }
 }

@@ -13,5 +13,4 @@ public interface BaseDao<Model> {
     boolean delete(String id);
 
     boolean update(Model model);
-
 }

@@ -75,7 +75,7 @@ public class ScientificWorksWindow extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AddScientistJobForm(masterService, table1, masterId);
+                new AddWorkForm(masterService, table1, masterId);
             }
         });
         editButton.addActionListener(new ActionListener() {

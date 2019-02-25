@@ -56,4 +56,5 @@ public abstract class SQLQueries {
     public static final String GET_SCIENCE_JOB_BY_ID = "SELECT * FROM sc_themes_scientists WHERE id = ?";
     public static final String GET_SCIENCE_THEMES_OF_WORK = "SELECT * FROM science_themes st INNER JOIN sc_works_sc_themes wt " +
             "ON st.id=wt.theme_id WHERE work_id = ?";
+    public static final String GET_SCIENTIST_BY_NAME = "SELECT * FROM scientists WHERE second_name = ?";
 }

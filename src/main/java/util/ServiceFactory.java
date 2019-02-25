@@ -3,6 +3,7 @@ package util;
 import dao.impl.*;
 import dao.interfaces.*;
 import model.Master;
+import model.Scientist;
 import service.MasterService;
 
 public class ServiceFactory {
@@ -13,6 +14,7 @@ public class ServiceFactory {
     private static ScienceThemeDao scienceThemeDao = new ScienceThemeDaoImpl();
     private static TeacherDao teacherDao = new TeacherDaoImpl();
     private static WorksAndJobsDao worksAndJobsDao = new WorksAndJobsDaoImpl();
+    private static ScientistDao scientistBaseDao = new ScientistDaoImpl();
 
     private ServiceFactory() {
     }
@@ -23,7 +25,8 @@ public class ServiceFactory {
                     cathedraDao,
                     scienceThemeDao,
                     teacherDao,
-                    worksAndJobsDao);
+                    worksAndJobsDao,
+                    scientistBaseDao);
         }
         return masterService;
     }

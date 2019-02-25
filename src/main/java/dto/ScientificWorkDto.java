@@ -12,6 +12,24 @@ public class ScientificWorkDto {
     private int yearOfJob;
     private List<Scientist> authors;
     private List<ScienceTheme> scienceThemes;
+    private List<String> themeNames;
+    private List<String> authorsNames;
+
+    public List<String> getAuthorsNames() {
+        return authorsNames;
+    }
+
+    public void setAuthorsNames(List<String> authorsNames) {
+        this.authorsNames = authorsNames;
+    }
+
+    public List<String> getThemeNames() {
+        return themeNames;
+    }
+
+    public void setThemeNames(List<String> themeNames) {
+        this.themeNames = themeNames;
+    }
 
     public String getId() {
         return id;

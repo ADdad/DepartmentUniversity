@@ -2,7 +2,7 @@ package model;
 
 import java.util.List;
 
-public abstract class Scientist {
+public class Scientist {
 
     private String scientistId;
     private String secondName;
