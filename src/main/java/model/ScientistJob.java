@@ -21,6 +21,7 @@ public class ScientistJob {
     }
 
     public ScientistJob(String id, String name, Date startDate, Date endDate, String workerId, String scienceThemeId) {
+        this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

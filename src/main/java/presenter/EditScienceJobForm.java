@@ -82,11 +82,12 @@ public class EditScienceJobForm extends JFrame {
         }
         scientistJobDtoResponse.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
         scientistJobDtoResponse.setId(scientistJobDto.getId());
+        scientistJobDtoResponse.setWorkerId(scientistJobDto.getWorkerId());
         return scientistJobDtoResponse;
     }
 
     private void extractJobData(){
-        nameField.setText(scientistJobDto.getName());
+        this.nameField.setText(scientistJobDto.getName());
         endDate.setDate(scientistJobDto.getEndDate());
         startDate.setDate(scientistJobDto.getStartDate());
         scienceThemeBox.setSelectedItem(scientistJobDto.getScienceTheme().getName());
