@@ -74,6 +74,12 @@ public class EditMasterForm extends JFrame {
                 }
             }
         });
+        workOnThemasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ScientificJobsWindow(masterService, masterEditDto.getId());
+            }
+        });
     }
 
     private MasterEditDto combineMasterData() {

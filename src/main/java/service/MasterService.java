@@ -207,7 +207,15 @@ public class MasterService {
     }
 
     public ScientistJobDto getJobToEdit(String jobId) {
-       // worksAndJobsDao.getJ
-        return null;
+       return migrateJobToDto(worksAndJobsDao.getScientistJobById(jobId));
+    }
+
+    public void updateJobOfMaster(ScientistJobDto jobEditDto) {
+        ScienceTheme scienceTheme = scienceThemeDao.getByName(jobEditDto.getScienceTheme().getName());
+        worksAndJobsDao.addScientistJob(new ScientistJob(jobEditDto.getName(),
+                jobEditDto.getStartDate(),
+                jobEditDto.getEndDate(),
+                jobEditDto.getWorkerId(),
+                scienceTheme.getId()));
     }
 }

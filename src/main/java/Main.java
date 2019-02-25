@@ -6,8 +6,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        new MainForm(ServiceFactory.getMasterService());
-        new ScientificJobsWindow(ServiceFactory.getMasterService());
+        new MainForm(ServiceFactory.getMasterService());
+//        new ScientificJobsWindow(ServiceFactory.getMasterService());
     }
 
 }

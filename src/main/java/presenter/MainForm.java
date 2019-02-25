@@ -84,7 +84,7 @@ public class MainForm extends JFrame {
     private void configTable(){
         MastersTableModel model = new MastersTableModel(masterService.getMastersForMainTable());
         table1.setModel(model);
-        table1.setRowSelectionInterval(0, 0);
+        if(table1.getModel().getRowCount() > 0) table1.setRowSelectionInterval(0, 0);
     }
 
     private void setContentOfCathedras(){

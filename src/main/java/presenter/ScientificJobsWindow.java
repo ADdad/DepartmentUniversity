@@ -124,13 +124,13 @@ public class ScientificJobsWindow extends JFrame {
     private void configTable() {
         ScienceJobTableModel model = new ScienceJobTableModel(masterService.getMasterJobs(masterId));
         table1.setModel(model);
-        table1.setRowSelectionInterval(0, 0);
+        if(table1.getModel().getRowCount() > 0) table1.setRowSelectionInterval(0, 0);
     }
 
     private void setContentOfScienceThemes() {
         List<String> scienceThemesBox = masterService.getScienceThemesValues();
         scienceThemesBox.add(0, "");
-        scienceThemesBox.forEach(chief -> chiefsBox.addItem(chief));
+        scienceThemesBox.forEach(chief -> scienceThemeBox.addItem(chief));
     }
 
     private String getSelectedJobThemeId() {

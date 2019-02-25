@@ -53,10 +53,10 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="c84e4" class="javax.swing.JButton" binding="addButton" default-binding="true">
+          <component id="c84e4" class="javax.swing.JButton" binding="saveButton">
             <constraints/>
             <properties>
-              <text value="Add"/>
+              <text value="Save"/>
             </properties>
           </component>
           <component id="8aa20" class="javax.swing.JButton" binding="cancelButton">

@@ -17,22 +17,66 @@ import java.util.UUID;
 public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     @Override
     public List<ScientistJob> getScientistJobsByWorkerId(String workerId) {
-        return getJobsByQueryAndStringParams(SQLQueries.GET_SCIENTIST_JOBS_BY_WORKER_ID, new String[]{workerId});
+        List<ScientistJob> scientistJobs = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIST_JOBS_BY_WORKER_ID)) {
+            stmt.setString(1, workerId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                scientistJobs.add(extractScientistJobFromRS(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return scientistJobs;
     }
 
     @Override
     public List<ScientificWork> getScientificWorksByThemeId(String themeId) {
-        return getWorksByQueryAndStringParams(SQLQueries.GET_SCIENTIFIC_WORKS_BY_THEME_ID, new String[]{themeId});
+        List<ScientificWork> scientificWorks = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIFIC_WORKS_BY_THEME_ID)) {
+            stmt.setString(1, themeId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                scientificWorks.add(extractScientificWorkFromRS(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return scientificWorks;
     }
 
     @Override
     public List<ScientificWork> getScientificWorksByAuthorId(String authorId) {
-        return getWorksByQueryAndStringParams(SQLQueries.GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID, new String[]{authorId});
+        List<ScientificWork> scientificWorks = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID)) {
+            stmt.setString(1, authorId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                scientificWorks.add(extractScientificWorkFromRS(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return scientificWorks;
     }
 
     @Override
     public List<ScientistJob> getScientistJobsByThemeId(String themeId) {
-        return getJobsByQueryAndStringParams(SQLQueries.GET_SCIENTIST_JOBS_BY_THEME_ID, new String[]{themeId});
+        List<ScientistJob> scientistJobs = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIST_JOBS_BY_THEME_ID)) {
+            stmt.setString(1, themeId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                scientistJobs.add(extractScientistJobFromRS(rs));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return scientistJobs;
     }
 
     @Override
@@ -61,45 +105,12 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
         return null;
     }
 
-    private List<ScientificWork> getWorksByQueryAndStringParams(String query, String[] params) {
-        List<ScientificWork> scientificWorks = new ArrayList();
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-            for (int i = 1; i < params.length; i++) {
-                stmt.setString(i, params[i]);
-            }
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                scientificWorks.add(extractScientificWorkFromRS(rs));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return scientificWorks;
-    }
-
-    private List<ScientistJob> getJobsByQueryAndStringParams(String query, String[] params) {
-        List<ScientistJob> scientistJobs = new ArrayList();
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-            for (int i = 1; i < params.length; i++) {
-                stmt.setString(i, params[i]);
-            }
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                scientistJobs.add(extractScientistJobFromRS(rs));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return scientistJobs;
-    }
 
     private ScientistJob extractScientistJobFromRS(ResultSet rs) throws SQLException {
         ScientistJob scientistJob = new ScientistJob();
         scientistJob.setId(rs.getString("id"));
         scientistJob.setWorkerId(rs.getString("worker_id"));
-        scientistJob.setScienceThemeId(rs.getString("theme_id"));
+        scientistJob.setScienceThemeId(rs.getString("science_theme_id"));
         scientistJob.setName(rs.getString("name"));
         scientistJob.setStartDate(rs.getDate("start_date"));
         scientistJob.setEndDate(rs.getDate("end_date"));
@@ -123,8 +134,9 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             stmt.setString(1, newId);
             stmt.setString(2, scientistJob.getScienceThemeId());
             stmt.setString(3, scientistJob.getWorkerId());
-            stmt.setDate(4, scientistJob.getStartDate());
-            stmt.setDate(5, scientistJob.getEndDate());
+            stmt.setString(4, scientistJob.getName());
+            stmt.setDate(5, scientistJob.getStartDate());
+            stmt.setDate(6, scientistJob.getEndDate());
             int i = stmt.executeUpdate();
             return i == 1;
         } catch (SQLException e) {

@@ -3,6 +3,7 @@ package presenter;
 import com.toedter.calendar.JDateChooser;
 import dto.ScientistJobDto;
 import model.ScienceTheme;
+import model.ScientistJob;
 import presenter.table.models.ScienceJobTableModel;
 import service.MasterService;
 
@@ -21,7 +22,7 @@ public class EditScienceJobForm extends JFrame {
     private JTextField genderField;
     private JTextArea themeOfDiplomaArea;
     private JPanel startDatePanel;
-    private JButton addButton;
+    private JButton saveButton;
     private JButton cancelButton;
     private JPanel endDatePanel;
     private JTextField endReasonField;
@@ -40,6 +41,7 @@ public class EditScienceJobForm extends JFrame {
         this.masterService = masterService;
         this.scientistJobDto = scientistJobDto;
         setContentOfThemes();
+        extractJobData();
         setContentPane(rootAddPanel);
         setVisible(true);
         setSize(500, 500);
@@ -58,12 +60,12 @@ public class EditScienceJobForm extends JFrame {
                 dispose();
             }
         });
-        addButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ScientistJobDto jobEditDto = combineJobData();
                 if (validateInput()) {
-                    masterService.addJobToMaster(jobEditDto);
+                    masterService.updateJobOfMaster(jobEditDto);
                     rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(scientistJobDto.getWorkerId())));
                     dispose();
                 }
@@ -72,14 +74,22 @@ public class EditScienceJobForm extends JFrame {
     }
 
     private ScientistJobDto combineJobData() {
-        ScientistJobDto scientistJobDto = new ScientistJobDto();
-        scientistJobDto.setName(nameField.getText());
-        scientistJobDto.setStartDate(new Date(startDate.getDate().getTime()));
+        ScientistJobDto scientistJobDtoResponse = new ScientistJobDto();
+        scientistJobDtoResponse.setName(nameField.getText());
+        scientistJobDtoResponse.setStartDate(new Date(startDate.getDate().getTime()));
         if(endDate.getDate() != null){
-            scientistJobDto.setEndDate(new Date(endDate.getDate().getTime()));
+            scientistJobDtoResponse.setEndDate(new Date(endDate.getDate().getTime()));
         }
-        scientistJobDto.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
-        return scientistJobDto;
+        scientistJobDtoResponse.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
+        scientistJobDtoResponse.setId(scientistJobDto.getId());
+        return scientistJobDtoResponse;
+    }
+
+    private void extractJobData(){
+        nameField.setText(scientistJobDto.getName());
+        endDate.setDate(scientistJobDto.getEndDate());
+        startDate.setDate(scientistJobDto.getStartDate());
+        scienceThemeBox.setSelectedItem(scientistJobDto.getScienceTheme().getName());
     }
 
     private boolean validateInput() {
