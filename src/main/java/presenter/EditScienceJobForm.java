@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.Calendar;
 
-public class EditScientistJobForm extends JFrame {
+public class EditScienceJobForm extends JFrame {
     private JPanel rootAddPanel;
     private JTextField nameField;
     private JTextField phoneField;
@@ -33,12 +33,12 @@ public class EditScientistJobForm extends JFrame {
     private JDateChooser endDate = new JDateChooser();
     private MasterService masterService;
     private JTable rootTable;
-    private String masterId;
+    private ScientistJobDto scientistJobDto;
 
-    public EditScientistJobForm(MasterService masterService, JTable rootTable, String masterId) {
+    public EditScienceJobForm(MasterService masterService, JTable rootTable, ScientistJobDto scientistJobDto) {
         this.rootTable = rootTable;
         this.masterService = masterService;
-        this.masterId = masterId;
+        this.scientistJobDto = scientistJobDto;
         setContentOfThemes();
         setContentPane(rootAddPanel);
         setVisible(true);
@@ -63,8 +63,8 @@ public class EditScientistJobForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ScientistJobDto jobEditDto = combineJobData();
                 if (validateInput()) {
-                    masterService.addJobToMaster(jobEditDto, masterId);
-                    rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
+                    masterService.addJobToMaster(jobEditDto);
+                    rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(scientistJobDto.getWorkerId())));
                     dispose();
                 }
             }

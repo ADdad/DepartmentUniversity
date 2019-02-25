@@ -81,6 +81,9 @@ public class ScienceJobTableModel extends AbstractTableModel {
         ScientistJobDto job = jobs.get(rowIndex);
         Object value = null;
         switch (columnIndex) {
+            case -3:
+                value = job.getId();
+                break;
             case -2:
                 value = job.getScienceTheme().getId();
                 break;

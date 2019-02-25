@@ -28,11 +28,10 @@ public abstract class SQLQueries {
     public static final String GET_SCIENTIST_JOBS_BY_WORKER_ID = "SELECT * FROM sc_themes_scientists WHERE worker_id = ?";
     public static final String GET_SCIENTIST_JOBS_BY_THEME_ID = "SELECT * FROM sc_themes_scientists WHERE science_theme_id = ?";
     public static final String GET_ALL_SCIENTIST_JOBS = "SELECT * FROM sc_themes_scientists";
-    public static final String DELETE_SCIENTIST_JOB = "DELETE FROM sc_themes_scientists WHERE science_theme_id = ? AND " +
-            "worker_id = ?";
-    public static final String UPDATE_SCIENTIST_JOB = "UPDATE sc_themes_scientists SET start_date = ?, end_date = ? WHERE " +
-            "science_theme_id = ? AND worker_id = ?";
-    public static final String INSERT_SCIENTIST_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?)";
+    public static final String DELETE_SCIENTIST_JOB = "DELETE FROM sc_themes_scientists WHERE id = ?";
+    public static final String UPDATE_SCIENTIST_JOB = "UPDATE sc_themes_scientists SET start_date = ?, end_date = ?, " +
+            "science_theme_id = ?, worker_id = ? WHERE id = ?";
+    public static final String INSERT_SCIENTIST_JOB = "INSERT INTO sc_themes_scientists VALUES (?, ?, ?, ?, ?)";
     public static final String INSERT_SCIENTIFIC_WORK = "INSERT INTO scientific_works VALUES (?, ?, ?, ?)";
     public static final String GET_SCIENTIFIC_WORKS_BY_AUTHOR_ID = "SELECT * FROM scientific_works sw INNER JOIN" +
             "sc_works_scientists ss ON sw.id = ss.work_id WHERE ss.author_id = ?";
@@ -53,4 +52,6 @@ public abstract class SQLQueries {
     public static final String GET_TEACHER_BY_NAME = "SELECT * FROM scientists s INNER JOIN teachers m " +
             "ON s.scientist_id = m.scientist_id WHERE second_name = ?";
     public static final String GET_SCIENCE_THEME_BY_NAME = "SELECT * FROM science_themes WHERE name = ?";
+    public static final String GET_SCIENTIFIC_WORK_BY_ID = "SELECT * FROM scientific_works WHERE id = ?";
+    public static final String GET_SCIENCE_JOB_BY_ID = "SELECT * FROM sc_themes_scientists WHERE id = ?";
 }

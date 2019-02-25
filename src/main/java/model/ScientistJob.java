@@ -3,6 +3,7 @@ package model;
 import java.sql.Date;
 
 public class ScientistJob {
+    private String id;
     private String name;
     private Date startDate;
     private Date endDate;
@@ -10,6 +11,14 @@ public class ScientistJob {
     private String scienceThemeId;
 
     public ScientistJob(){}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ScientistJob(String name, Date startDate, Date endDate, String workerId, String scienceThemeId) {
         this.name = name;

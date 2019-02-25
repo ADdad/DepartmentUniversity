@@ -63,7 +63,7 @@ public class AddScientistJobForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ScientistJobDto jobEditDto = combineJobData();
                 if (validateInput()) {
-                    masterService.addJobToMaster(jobEditDto, masterId);
+                    masterService.addJobToMaster(jobEditDto);
                     rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
                     dispose();
                 }
@@ -78,6 +78,7 @@ public class AddScientistJobForm extends JFrame {
         if(endDate.getDate() != null){
             scientistJobDto.setEndDate(new Date(endDate.getDate().getTime()));
         }
+        scientistJobDto.setWorkerId(masterId);
         scientistJobDto.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
         return scientistJobDto;
     }

@@ -138,6 +138,7 @@ public class MasterService {
 
     private ScientistJobDto migrateJobToDto(ScientistJob scientistJob) {
         ScientistJobDto scientistJobDto = new ScientistJobDto();
+        scientistJobDto.setId(scientistJob.getId());
         scientistJobDto.setWorkerId(scientistJob.getWorkerId());
         scientistJobDto.setEndDate(scientistJob.getEndDate());
         scientistJobDto.setName(scientistJob.getName());
@@ -146,8 +147,8 @@ public class MasterService {
         return scientistJobDto;
     }
 
-    public void deleteMasterJob(String masterId, String selectedJobThemeId) {
-        worksAndJobsDao.deleteScientistJob(new ScientistJob(masterId, selectedJobThemeId));
+    public void deleteMasterJob(String id) {
+        worksAndJobsDao.deleteScientistJob(id);
     }
 
     public List<ScientistJobDto> getFilteredJobs(String scienceThemeName, Date date, Date date1, String masterId) {
@@ -196,7 +197,7 @@ public class MasterService {
         return scienceThemeDao.getAll().stream().map(ScienceTheme::getName).collect(Collectors.toList());
     }
 
-    public void addJobToMaster(ScientistJobDto jobEditDto, String masterId) {
+    public void addJobToMaster(ScientistJobDto jobEditDto) {
         ScienceTheme scienceTheme = scienceThemeDao.getByName(jobEditDto.getScienceTheme().getName());
         worksAndJobsDao.addScientistJob(new ScientistJob(jobEditDto.getName(),
                 jobEditDto.getStartDate(),
@@ -205,7 +206,7 @@ public class MasterService {
                 scienceTheme.getId()));
     }
 
-    public ScientistJobDto getJobToEdit(String selectedJobThemeId, String masterId) {
+    public ScientistJobDto getJobToEdit(String jobId) {
        // worksAndJobsDao.getJ
         return null;
     }

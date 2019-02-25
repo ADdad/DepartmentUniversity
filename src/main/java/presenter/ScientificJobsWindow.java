@@ -105,7 +105,7 @@ public class ScientificJobsWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isRowSelected()) {
-                      new EditScientistJobForm(masterService, table1, masterService.getJobToEdit(getSelectedJobThemeId(), masterId));
+                      new EditScienceJobForm(masterService, table1, masterService.getJobToEdit(getSelectedJobId()));
                 }
             }
         });
@@ -138,8 +138,13 @@ public class ScientificJobsWindow extends JFrame {
         return table1.getModel().getValueAt(row, -2).toString();
     }
 
+    private String getSelectedJobId() {
+        int row = table1.getSelectedRow();
+        return table1.getModel().getValueAt(row, -3).toString();
+    }
+
     private void deleteJob() {
-        masterService.deleteMasterJob(masterId, getSelectedJobThemeId());
+        masterService.deleteMasterJob(getSelectedJobId());
         table1.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
     }
 }

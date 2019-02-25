@@ -5,11 +5,20 @@ import model.ScienceTheme;
 import java.sql.Date;
 
 public class ScientistJobDto {
+    private String id;
     private String name;
     private Date startDate;
     private Date endDate;
     private ScienceTheme scienceTheme;
     private String workerId;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

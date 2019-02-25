@@ -253,6 +253,7 @@ VALUES
 
 CREATE TABLE sc_themes_scientists
 (
+    id VARCHAR(255) NOT NULL,
     science_theme_id VARCHAR(255) NOT NULL,
     worker_id VARCHAR(255) NOT NULL,
     start_date DATE NOT NULL,
@@ -262,15 +263,16 @@ CREATE TABLE sc_themes_scientists
         ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (worker_id)
         REFERENCES scientists(scientist_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE CASCADE ON UPDATE CASCADE,
+        PRIMARY KEY (id)
 );
 
 INSERT INTO sc_themes_scientists
 VALUES
-    ('idst1', 'ids8', '2018-01-02', NULL);
+    ('idj1', 'idst1', 'ids8', '2018-01-02', NULL);
 INSERT INTO sc_themes_scientists
 VALUES
-    ('idst2', 'ids5', '2019-11-07', NULL);
+    ('idj2', 'idst2', 'ids5', '2019-11-07', NULL);
 INSERT INTO sc_themes_scientists
 VALUES
-    ('idst3', 'ids6', '2020-04-22', NULL);
+    ('idj3', 'idst3', 'ids6', '2020-04-22', NULL);

@@ -10,10 +10,12 @@ public interface WorksAndJobsDao{
     List<ScientificWork> getScientificWorksByAuthorId(String authorId);
     List<ScientificWork> getScientificWorksByThemeId(String themeId);
     List<ScientistJob> getScientistJobsByThemeId(String themeId);
+    ScientistJob getScientistJobById(String id);
+    ScientificWork getScientificWorkId(String id);
     boolean addScientistJob(ScientistJob scientistJob);
     String addScientificWork(ScientificWork scientificWork);
-    boolean deleteScientificWork(ScientificWork scientificWork);
-    boolean deleteScientistJob(ScientistJob scientistJob);
+    boolean deleteScientificWork(String scientificWorkId);
+    boolean deleteScientistJob(String scientistJobId);
     boolean updateScientistJob(ScientistJob scientistJob);
     boolean updateScientificWork(ScientificWork scientificWork);
     boolean deleteAuthorFromWork(String authorId);

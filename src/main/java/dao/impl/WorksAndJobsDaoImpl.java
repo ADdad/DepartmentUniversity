@@ -35,6 +35,32 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
         return getJobsByQueryAndStringParams(SQLQueries.GET_SCIENTIST_JOBS_BY_THEME_ID, new String[]{themeId});
     }
 
+    @Override
+    public ScientistJob getScientistJobById(String id) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_JOB_BY_ID)) {
+            stmt.setString(1, id);
+            ScientistJob rs = extractScientistJobFromRS(stmt.executeQuery());
+            if (rs != null) return rs;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ScientificWork getScientificWorkId(String id) {
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENTIFIC_WORK_BY_ID)) {
+            stmt.setString(1, id);
+            ScientificWork rs = extractScientificWorkFromRS(stmt.executeQuery());
+            if (rs != null) return rs;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     private List<ScientificWork> getWorksByQueryAndStringParams(String query, String[] params) {
         List<ScientificWork> scientificWorks = new ArrayList();
         try (Connection connection = ConnectionFactory.getConnection();
@@ -71,6 +97,7 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
 
     private ScientistJob extractScientistJobFromRS(ResultSet rs) throws SQLException {
         ScientistJob scientistJob = new ScientistJob();
+        scientistJob.setId(rs.getString("id"));
         scientistJob.setWorkerId(rs.getString("worker_id"));
         scientistJob.setScienceThemeId(rs.getString("theme_id"));
         scientistJob.setName(rs.getString("name"));
@@ -92,10 +119,12 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     public boolean addScientistJob(ScientistJob scientistJob) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(SQLQueries.INSERT_SCIENTIST_JOB)) {
-            stmt.setString(1, scientistJob.getScienceThemeId());
-            stmt.setString(2, scientistJob.getWorkerId());
-            stmt.setDate(3, scientistJob.getStartDate());
-            stmt.setDate(4, scientistJob.getEndDate());
+            String newId = UUID.randomUUID().toString();
+            stmt.setString(1, newId);
+            stmt.setString(2, scientistJob.getScienceThemeId());
+            stmt.setString(3, scientistJob.getWorkerId());
+            stmt.setDate(4, scientistJob.getStartDate());
+            stmt.setDate(5, scientistJob.getEndDate());
             int i = stmt.executeUpdate();
             return i == 1;
         } catch (SQLException e) {
@@ -122,10 +151,10 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     }
 
     @Override
-    public boolean deleteScientificWork(ScientificWork scientificWork) {
+    public boolean deleteScientificWork(String scientificWorkId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENTIFIC_WORK)) {
-            ps.setString(1, scientificWork.getId());
+            ps.setString(1, scientificWorkId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -135,11 +164,10 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
     }
 
     @Override
-    public boolean deleteScientistJob(ScientistJob scientistJob) {
+    public boolean deleteScientistJob(String scientificJobId) {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.DELETE_SCIENTIST_JOB)) {
-            ps.setString(1, scientistJob.getScienceThemeId());
-            ps.setString(2, scientistJob.getWorkerId());
+            ps.setString(1, scientificJobId);
             int i = ps.executeUpdate();
             return i > 0;
         } catch (SQLException e) {
@@ -156,6 +184,7 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             ps.setDate(2, scientistJob.getEndDate());
             ps.setString(3, scientistJob.getScienceThemeId());
             ps.setString(4, scientistJob.getWorkerId());
+            ps.setString(5, scientistJob.getId());
             int i = ps.executeUpdate();
             return i == 1;
         } catch (SQLException se) {
