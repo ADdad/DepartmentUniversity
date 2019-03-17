@@ -1,4 +1,4 @@
-package com.univer.dto;
+package com.univer.model.dto;
 
 import com.univer.model.ScienceTheme;
 import com.univer.model.Scientist;

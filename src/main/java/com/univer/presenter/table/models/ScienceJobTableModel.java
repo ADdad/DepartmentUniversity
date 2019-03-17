@@ -1,6 +1,6 @@
 package com.univer.presenter.table.models;
 
-import com.univer.dto.ScientistJobDto;
+import com.univer.model.dto.ScientistJobDto;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

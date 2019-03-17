@@ -1,10 +1,10 @@
 package com.univer.service;
 
 import com.univer.dao.interfaces.*;
-import com.univer.dto.MasterEditDto;
-import com.univer.dto.MasterMainDto;
-import com.univer.dto.ScientificWorkDto;
-import com.univer.dto.ScientistJobDto;
+import com.univer.model.dto.MasterEditDto;
+import com.univer.model.dto.MasterMainDto;
+import com.univer.model.dto.ScientificWorkDto;
+import com.univer.model.dto.ScientistJobDto;
 import com.univer.model.*;
 
 import java.util.*;

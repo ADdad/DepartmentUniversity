@@ -1,6 +1,6 @@
 package com.univer.presenter.table.models;
 
-import com.univer.dto.ScientificWorkDto;
+import com.univer.model.dto.ScientificWorkDto;
 import com.univer.model.ScienceTheme;
 
 import javax.swing.table.AbstractTableModel;
