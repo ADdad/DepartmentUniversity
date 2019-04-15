@@ -1,14 +1,15 @@
 package com.univer.model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Postgraduate extends Scientist {
 
     private String cathedraId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String chiefId;
+    private Date startDate;
+    private Date endDate;
     private String thesisTheme;
-    private LocalDate thesisProtectionDate;
+    private Date thesisProtectionDate;
 
     public String getCathedraId() {
         return cathedraId;
@@ -18,20 +19,12 @@ public class Postgraduate extends Scientist {
         this.cathedraId = cathedraId;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public String getChiefId() {
+        return chiefId;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setChiefId(String chiefId) {
+        this.chiefId = chiefId;
     }
 
     public String getThesisTheme() {
@@ -42,11 +35,27 @@ public class Postgraduate extends Scientist {
         this.thesisTheme = thesisTheme;
     }
 
-    public LocalDate getThesisProtectionDate() {
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getThesisProtectionDate() {
         return thesisProtectionDate;
     }
 
-    public void setThesisProtectionDate(LocalDate thesisProtectionDate) {
+    public void setThesisProtectionDate(Date thesisProtectionDate) {
         this.thesisProtectionDate = thesisProtectionDate;
     }
 }

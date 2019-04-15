@@ -3,17 +3,24 @@ package com.univer.util;
 public abstract class SQLQueries {
     public static final String GET_MASTER_BY_ID = "SELECT * FROM scientists s INNER JOIN masters m " +
             "ON s.scientist_id = m.scientist_id  WHERE s.scientist_id=?";
+    public static final String GET_POSTGRADUATE_BY_ID = "SELECT * FROM scientists s INNER JOIN postgraduates p " +
+            "ON s.scientist_id = p.scientist_id  WHERE s.scientist_id=?";
     public static final String INSERT_SCIENSIST = "INSERT INTO scientists VALUES (?, ?, ?, ?)";
     public static final String INSERT_MASTER = "INSERT INTO masters VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String DELETE_MASTER = "DELETE FROM masters WHERE scientist_id = ?";
+    public static final String DELETE_POSTGRADUATE = "DELETE FROM postgraduates WHERE scientist_id = ?";
     public static final String DELETE_SCIENTIST = "DELETE FROM scientists WHERE scientist_id = ?";
+    public static final String INSERT_POSTGRADUATE = "INSERT INTO postgraduates VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String GET_ALL_SCIENTISTS = "SELECT * FROM scientists";
     public static final String GET_ALL_MASTERS = "SELECT * FROM scientists s INNER JOIN masters m ON s.scientist_id = m.scientist_id";
+    public static final String GET_ALL_POSTGRADUATES = "SELECT * FROM scientists s INNER JOIN postgraduates m ON s.scientist_id = m.scientist_id";
     public static final String GET_SCIENTIST_BY_ID = "SELECT * FROM scientists WHERE scientist_id = ?";
     public static final String UPDATE_SCIENTIST = "UPDATE scientists SET second_name = ?, phone_number = ?, gender = ? " +
             "WHERE scientist_id = ?";
     public static final String UPDATE_MASTER = "UPDATE masters SET cathedra_id = ?, chief_id = ?, diploma_theme = ?, " +
             "start_date = ?, end_date = ?, end_reason = ? WHERE scientist_id = ?";
+    public static final String UPDATE_POSTGRADUATE = "UPDATE postgraduates SET cathedra_id = ?, chief_id = ?, thesis_theme = ?, " +
+            "start_date = ?, end_date = ?, thesis_protection_date = ? WHERE scientist_id = ?";
     public static final String GET_CATHEDRA_BY_ID = "SELECT * FROM cathedras WHERE id = ?";
     public static final String GET_ALL_CATHEDRAS = "SELECT * FROM cathedras";
     public static final String INSERT_CATHEDRA = "INSERT INTO cathedras VALUES (?, ?, ?)";
@@ -23,7 +30,7 @@ public abstract class SQLQueries {
     public static final String GET_ALL_SCIENCE_THEMES = "SELECT * FROM science_themes";
     public static final String INSERT_SCIENCE_THEME = "INSERT INTO science_themes VALUES (?, ?, ?, ?, ?, ?, ?)";
     public static final String DELETE_SCIENCE_THEME = "DELETE FROM science_themes WHERE id = ?";
-    public static final String UPDATE_SCIENCE_THEME = "UPDATE science_themes SET chief_id = ?, cathedra_id = ?, name = ?, " +
+    public static final String UPDATE_SCIENCE_THEME = "UPDATE science_themes SET cathedra_id = ?, name = ?, " +
             "customer = ?, start_date = ?, end_date = ? WHERE id = ?";
     public static final String GET_SCIENTIST_JOBS_BY_WORKER_ID = "SELECT * FROM sc_themes_scientists WHERE worker_id = ?";
     public static final String GET_SCIENTIST_JOBS_BY_THEME_ID = "SELECT * FROM sc_themes_scientists WHERE science_theme_id = ?";
@@ -59,4 +66,6 @@ public abstract class SQLQueries {
     public static final String GET_SCIENTIST_BY_NAME = "SELECT * FROM scientists WHERE second_name = ?";
     public static final String DELETE_ALL_THEMES_FROM_WORK = "DELETE FROM sc_works_sc_themes WHERE work_id = ?";
     public static final String DELETE_ALL_AUTHORS_FROM_WORK = "DELETE FROM sc_works_scientists WHERE work_id = ?";
+    public static final String GET_SCIENCE_THEME_CHIEF = "SELECT worker_id FROM sc_themes_scientists WHERE science_theme_id = ? AND " +
+            "name = 'theme chief' ORDER BY start_date DESC";
 }

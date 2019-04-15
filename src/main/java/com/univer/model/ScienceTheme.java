@@ -20,6 +20,16 @@ public class ScienceTheme {
         this.name = name;
     }
 
+
+    public ScienceTheme(String id, String name, String customer, Date startDate, Date endDate) {
+        this.id = id;
+        this.name = name;
+        this.customer = customer;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+
     public List<String> getScientificJobs() {
         return scientificJobs;
     }

@@ -2,7 +2,9 @@ package com.univer.dao.impl;
 
 import com.univer.dao.config.ConnectionFactory;
 import com.univer.dao.interfaces.ScienceThemeDao;
+import com.univer.dao.interfaces.WorksAndJobsDao;
 import com.univer.model.ScienceTheme;
+import com.univer.model.ScientistJob;
 import com.univer.util.SQLQueries;
 
 import java.sql.*;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class ScienceThemeDaoImpl implements ScienceThemeDao {
+    WorksAndJobsDao worksAndJobsDao = new WorksAndJobsDaoImpl();
+
     @Override
     public ScienceTheme getById(String id) {
         try (Connection connection = ConnectionFactory.getConnection();
@@ -29,7 +33,7 @@ public class ScienceThemeDaoImpl implements ScienceThemeDao {
     private ScienceTheme extractScienceThemeFromRS(ResultSet rs) throws SQLException {
         ScienceTheme scienceTheme = new ScienceTheme();
         scienceTheme.setId(rs.getString("id"));
-        scienceTheme.setChiefId(rs.getString("chief_id"));
+        scienceTheme.setChiefId(getChiefId(scienceTheme));
         scienceTheme.setCathedraId(rs.getString("cathedra_id"));
         scienceTheme.setName(rs.getString("name"));
         scienceTheme.setCustomer(rs.getString("customer"));
@@ -40,22 +44,43 @@ public class ScienceThemeDaoImpl implements ScienceThemeDao {
 
     @Override
     public boolean add(ScienceTheme scienceTheme) {
+        if(scienceTheme.getChiefId() != null){
+            ScientistJob scientistJob = new ScientistJob();
+            scientistJob.setScienceThemeId(scienceTheme.getId());
+            scientistJob.setWorkerId(scienceTheme.getChiefId());
+            scientistJob.setName("theme chief");
+            worksAndJobsDao.addScientistJob(scientistJob);
+        }
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.INSERT_SCIENCE_THEME);) {
             String newId = UUID.randomUUID().toString();
             ps.setString(1, newId);
-            ps.setString(2, scienceTheme.getChiefId());
-            ps.setString(3, scienceTheme.getCathedraId());
-            ps.setString(4, scienceTheme.getName());
-            ps.setString(5, scienceTheme.getCustomer());
-            ps.setDate(6, scienceTheme.getStartDate());
-            ps.setDate(7, scienceTheme.getEndDate());
+            ps.setString(2, scienceTheme.getCathedraId());
+            ps.setString(3, scienceTheme.getName());
+            ps.setString(4, scienceTheme.getCustomer());
+            ps.setDate(5, scienceTheme.getStartDate());
+            ps.setDate(6, scienceTheme.getEndDate());
             int i = ps.executeUpdate();
             ps.close();
                 return i == 1;
         } catch (SQLException ex) {
             return false;
         }
+    }
+
+    @Override
+    public String getChiefId(ScienceTheme scienceTheme){
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(SQLQueries.GET_SCIENCE_THEME_CHIEF)) {
+            stmt.setString(1, scienceTheme.getId());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -88,9 +113,15 @@ public class ScienceThemeDaoImpl implements ScienceThemeDao {
 
     @Override
     public boolean update(ScienceTheme scienceTheme) {
+        if(scienceTheme.getChiefId() != null){
+            ScientistJob scientistJob = new ScientistJob();
+            scientistJob.setScienceThemeId(scienceTheme.getId());
+            scientistJob.setWorkerId(scienceTheme.getChiefId());
+            scientistJob.setName("theme chief");
+            worksAndJobsDao.addScientistJob(scientistJob);
+        }
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement ps = connection.prepareStatement(SQLQueries.UPDATE_SCIENCE_THEME)) {
-            ps.setString(1, scienceTheme.getChiefId());
             ps.setString(2, scienceTheme.getCathedraId());
             ps.setString(3, scienceTheme.getName());
             ps.setString(4, scienceTheme.getCustomer());

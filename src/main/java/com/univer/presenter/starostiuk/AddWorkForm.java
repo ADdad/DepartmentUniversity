@@ -1,11 +1,9 @@
-package com.univer.presenter;
+package com.univer.presenter.starostiuk;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.toedter.calendar.JDateChooser;
-import com.univer.model.dto.ScientistJobDto;
-import com.univer.model.ScienceTheme;
-import com.univer.presenter.table.models.ScienceJobTableModel;
+import com.univer.model.dto.ScientificWorkDto;
+import com.univer.presenter.table.models.WorkTableModel;
 import com.univer.service.MasterService;
 
 import javax.swing.*;
@@ -13,10 +11,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.util.Calendar;
 
-public class AddScientistJobForm extends JFrame {
+public class AddWorkForm extends JFrame {
     private JPanel rootAddPanel;
     private JTextField nameField;
     private JTextField phoneField;
@@ -30,18 +26,25 @@ public class AddScientistJobForm extends JFrame {
     private JComboBox scienceThemeBox;
     private JComboBox chiefsBox;
     private JLabel alertText;
-    private Calendar calendar = Calendar.getInstance();
-    private JDateChooser startDate = new JDateChooser(calendar.getTime());
-    private JDateChooser endDate = new JDateChooser();
+    private JTextField typeTextField;
+    private JSpinner yearSpinner;
+    private JList list1;
+    private JList list2;
     private MasterService masterService;
     private JTable rootTable;
     private String masterId;
 
-    public AddScientistJobForm(MasterService masterService, JTable rootTable, String masterId) {
+    public AddWorkForm(MasterService masterService, JTable rootTable, String masterId) {
         this.rootTable = rootTable;
         this.masterService = masterService;
         this.masterId = masterId;
+        yearSpinner.setSize(40, 20);
         setContentOfThemes();
+        setContentOfAuthors();
+        list1.setSelectionMode(
+                ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        list2.setSelectionMode(
+                ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         setContentPane(rootAddPanel);
         setVisible(true);
         setSize(500, 500);
@@ -49,11 +52,6 @@ public class AddScientistJobForm extends JFrame {
         setLocationRelativeTo(null);
         alertText.setForeground(Color.red);
 
-        // Date fields
-        startDate.setDateFormatString("dd/MM/yyyy");
-        endDate.setDateFormatString("dd/MM/yyyy");
-        startDatePanel.add(startDate);
-        endDatePanel.add(endDate);
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -63,37 +61,39 @@ public class AddScientistJobForm extends JFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ScientistJobDto jobEditDto = combineJobData();
+                ScientificWorkDto workDto = combineWorkData();
                 if (validateInput()) {
-                    masterService.addJobToMaster(jobEditDto);
-                    rootTable.setModel(new ScienceJobTableModel(masterService.getMasterJobs(masterId)));
+                    masterService.addWorkToMaster(workDto, masterId);
+                    rootTable.setModel(new WorkTableModel(masterService.getMastersWorks(masterId)));
                     dispose();
                 }
             }
         });
     }
 
-    private ScientistJobDto combineJobData() {
-        ScientistJobDto scientistJobDto = new ScientistJobDto();
-        scientistJobDto.setName(nameField.getText());
-        scientistJobDto.setStartDate(new Date(startDate.getDate().getTime()));
-        if (endDate.getDate() != null) {
-            scientistJobDto.setEndDate(new Date(endDate.getDate().getTime()));
-        }
-        scientistJobDto.setWorkerId(masterId);
-        scientistJobDto.setScienceTheme(new ScienceTheme(scienceThemeBox.getSelectedItem().toString()));
-        return scientistJobDto;
+    private ScientificWorkDto combineWorkData() {
+        ScientificWorkDto scientificWorkDto = new ScientificWorkDto();
+        scientificWorkDto.setName(nameField.getText());
+        scientificWorkDto.setJobType(typeTextField.getText());
+        scientificWorkDto.setYearOfJob(Integer.parseInt(yearSpinner.getValue().toString()));
+        scientificWorkDto.setThemeNames(list1.getSelectedValuesList());
+        scientificWorkDto.setAuthorsNames(list2.getSelectedValuesList());
+        return scientificWorkDto;
     }
 
     private boolean validateInput() {
         boolean validator = true;
-        if (this.nameField.getText().isEmpty()) {
+        if (nameField.getText().isEmpty()) {
             validator = false;
             nameField.setBorder(new LineBorder(Color.red, 1));
         }
-        if (this.endDate.getDate() != null && startDate.getDate().after(endDate.getDate())) {
+        if (typeTextField.getText().isEmpty()) {
             validator = false;
-            nameField.setBorder(new LineBorder(Color.red, 1));
+            typeTextField.setBorder(new LineBorder(Color.red, 1));
+        }
+        if (list1.getSelectedValuesList().size() < 1) {
+            validator = false;
+            list1.setBorder(new LineBorder(Color.red, 1));
         }
         if (!validator)
             alertText.setVisible(true);
@@ -101,11 +101,11 @@ public class AddScientistJobForm extends JFrame {
     }
 
     private void setContentOfThemes() {
-        // masterService.getScienceThemesValues().forEach(theme -> scienceThemeBox.addItem(theme));
-        for (String s :
-                masterService.getScienceThemesValues()) {
-            scienceThemeBox.addItem(s);
-        }
+        list1.setListData(masterService.getScienceThemesValues().toArray());
+    }
+
+    private void setContentOfAuthors() {
+        list2.setListData(masterService.getAuthors(masterId).toArray());
     }
 
     {
@@ -124,16 +124,19 @@ public class AddScientistJobForm extends JFrame {
      */
     private void $$$setupUI$$$() {
         rootAddPanel = new JPanel();
-        rootAddPanel.setLayout(new GridLayoutManager(6, 2, new Insets(0, 0, 0, 0), -1, -1));
+        rootAddPanel.setLayout(new GridLayoutManager(6, 3, new Insets(0, 0, 0, 0), -1, -1));
         startDatePanel = new JPanel();
         startDatePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        rootAddPanel.add(startDatePanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        rootAddPanel.add(startDatePanel, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
-        label1.setText("Start  date*");
+        label1.setText("Type");
         startDatePanel.add(label1);
+        typeTextField = new JTextField();
+        typeTextField.setColumns(10);
+        startDatePanel.add(typeTextField);
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        rootAddPanel.add(panel1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(40, -1), null, null, 0, false));
+        rootAddPanel.add(panel1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, new Dimension(40, -1), null, null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("Name*");
         panel1.add(label2);
@@ -142,7 +145,7 @@ public class AddScientistJobForm extends JFrame {
         panel1.add(nameField);
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        rootAddPanel.add(panel2, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        rootAddPanel.add(panel2, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         addButton = new JButton();
         addButton.setText("Add");
         panel2.add(addButton);
@@ -151,7 +154,7 @@ public class AddScientistJobForm extends JFrame {
         panel2.add(cancelButton);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        rootAddPanel.add(panel3, new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        rootAddPanel.add(panel3, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         alertText = new JLabel();
         alertText.setBackground(new Color(-6094845));
         alertText.setText("Please fill all mandatory attributes");
@@ -159,18 +162,28 @@ public class AddScientistJobForm extends JFrame {
         panel3.add(alertText);
         endDatePanel = new JPanel();
         endDatePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        rootAddPanel.add(endDatePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        rootAddPanel.add(endDatePanel, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
-        label3.setText("End date");
+        label3.setText("Year");
         endDatePanel.add(label3);
+        yearSpinner = new JSpinner();
+        endDatePanel.add(yearSpinner);
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         rootAddPanel.add(panel4, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setText("Science theme*");
         panel4.add(label4);
-        scienceThemeBox = new JComboBox();
-        panel4.add(scienceThemeBox);
+        list1 = new JList();
+        panel4.add(list1);
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        rootAddPanel.add(panel5, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        label5.setText("Authors");
+        panel5.add(label5);
+        list2 = new JList();
+        panel5.add(list2);
     }
 
     /**

@@ -6,10 +6,7 @@ import com.univer.model.ScientificWork;
 import com.univer.model.ScientistJob;
 import com.univer.util.SQLQueries;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -86,7 +83,7 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             ScientistJob scientistJob = new ScientistJob();
-            if(rs.next()) {
+            if (rs.next()) {
 
                 scientistJob.setId(rs.getString("id"));
                 scientistJob.setWorkerId(rs.getString("worker_id"));
@@ -109,7 +106,7 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             ScientificWork scientificWork = new ScientificWork();
-            if(rs.next()) {
+            if (rs.next()) {
 
                 scientificWork.setId(rs.getString("sw.id"));
                 scientificWork.setName(rs.getString("sw.name"));
@@ -153,7 +150,11 @@ public class WorksAndJobsDaoImpl implements WorksAndJobsDao {
             stmt.setString(2, scientistJob.getScienceThemeId());
             stmt.setString(3, scientistJob.getWorkerId());
             stmt.setString(4, scientistJob.getName());
-            stmt.setDate(5, scientistJob.getStartDate());
+            if (scientistJob.getStartDate() == null) {
+                stmt.setDate(5, new Date(new java.util.Date().getTime()));
+            } else {
+                stmt.setDate(5, scientistJob.getStartDate());
+            }
             stmt.setDate(6, scientistJob.getEndDate());
             int i = stmt.executeUpdate();
             return i == 1;
